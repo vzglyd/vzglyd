@@ -3281,6 +3281,7 @@ dependencies = [
 [[package]]
 name = "vzglyd-slide"
 version = "0.1.0"
+source = "git+https://github.com/vzglyd/vzglyd-slide#f22ee923cce5d9eb30410a497472c1933fd67319"
 dependencies = [
  "bytemuck",
  "serde",
