@@ -1,0 +1,70 @@
+name: Project automation
+
+on:
+  issues:
+    types: [opened, closed, reopened]
+  pull_request:
+    types: [opened, closed, reopened, ready_for_review, converted_to_draft]
+
+jobs:
+  add-to-project:
+    name: Add to roadmap
+    runs-on: ubuntu-latest
+    if: github.event.action == 'opened'
+    permissions:
+      issues: read
+      pull-requests: read
+    steps:
+      - uses: actions/add-to-project@v1.0.2
+        with:
+          project-url: https://github.com/orgs/vzglyd/projects/1
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+
+  set-status-in-progress:
+    name: Mark In Progress
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'pull_request' && github.event.action == 'opened') ||
+      (github.event_name == 'issues' && github.event.action == 'reopened')
+    permissions:
+      issues: read
+      pull-requests: read
+    steps:
+      - uses: titoportas/update-project-fields@v0.1.0
+        with:
+          project-url: https://github.com/orgs/vzglyd/projects/1
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+          field-keys: Status
+          field-values: "In Progress"
+
+  set-status-done:
+    name: Mark Done
+    runs-on: ubuntu-latest
+    if: |
+      (github.event_name == 'issues' && github.event.action == 'closed') ||
+      (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true)
+    permissions:
+      issues: read
+      pull-requests: read
+    steps:
+      - uses: titoportas/update-project-fields@v0.1.0
+        with:
+          project-url: https://github.com/orgs/vzglyd/projects/1
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+          field-keys: Status
+          field-values: Done
+
+  set-status-todo:
+    name: Mark Todo (draft PR or reopened)
+    runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request' && github.event.action == 'converted_to_draft'
+    permissions:
+      pull-requests: read
+    steps:
+      - uses: titoportas/update-project-fields@v0.1.0
+        with:
+          project-url: https://github.com/orgs/vzglyd/projects/1
+          github-token: ${{ secrets.PROJECT_TOKEN }}
+          field-keys: Status
+          field-values: Todo
