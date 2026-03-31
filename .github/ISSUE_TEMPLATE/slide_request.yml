@@ -1,0 +1,24 @@
+name: Slide idea
+description: Suggest a new official slide
+labels:
+  - enhancement
+  - slide-request
+body:
+  - type: textarea
+    id: data_source
+    attributes:
+      label: What data would this slide show?
+    validations:
+      required: true
+  - type: textarea
+    id: api
+    attributes:
+      label: What API or data source does it use?
+  - type: dropdown
+    id: willing_to_build
+    attributes:
+      label: Are you willing to build it?
+      options:
+        - "Yes"
+        - "No"
+        - "Maybe with guidance"

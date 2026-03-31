@@ -1,0 +1,25 @@
+# The Form
+
+A haiku has 17 syllables. VZGLYD has 60,000 vertices. The difference between those two constraints is not kind — it is familiarity. We have had centuries to understand that haiku's constraint is generative, not limiting. The syllable count does not truncate the poem. It focuses it. VZGLYD's constraint is the same kind of thing. The numbers are different, the domain is different — but the relationship between the rule and what it produces is identical. The constraint is the form. You are working in a form.
+
+The vertex limit is 60,000 per slide. To situate that number: a human face in a modern game is built from roughly 15,000 polygons. A detailed character — hands, clothing, accessories — runs 50,000 to 80,000. An entire VZGLYD world: landscape, structures, water, sky, smoke, text overlays, every visible thing at once, sits under that same ceiling. The terrain slide builds rolling hills, five biome zones, procedurally-placed houses with ridge roofs, billboarded chimney smoke, and a bitcoin-price ticker in 4,225 vertices. That leaves 55,775 vertices unused. The constraint does not press from all sides. It gives you a room. But it is a room, not a field.
+
+What counting vertices feels like in practice: you develop an accounting for form. A house takes how many? A tree? Can the tree be eight-sided instead of sixteen — does it matter at this distance, under this light? The discipline of counting triangles is the discipline of asking which triangles matter. Every polygon that earns its place makes the ones around it mean more. You learn to read geometry the way a sculptor reads material: not filling space but carving it. You cannot accumulate your way to a good slide. You have to decide.
+
+The texture budget is 4MB total, with a maximum of 512×512 per individual texture. On a 55-inch television at a metre's viewing distance, each texel in a 512×512 texture maps to roughly 0.2mm. A 512×512 texture is a surface, not a photograph. You cannot hide weak geometry behind a richly detailed texture. The terrain slide's complete texture budget is 73,728 bytes: one 256×8 font atlas, one 128×128 noise texture. That is 1.7% of what is available. The constraint does not require spending everything to work within it.
+
+The small number of texture slots is the more interesting constraint, and the less obvious one. A slide gets a few textures, not a sprawling material graph. One slide may spend a slot on tileable noise for water normals, another on a lookup map, another on a font atlas and nothing else. The point is not that every slide inherits one grain. The point is that every slide must decide what its few texture slots are for.
+
+Flat shading is a common consequence of these limits because it makes structure visible. When you build geometry with flat shading you can see every face — the structure of the mesh is visible in the render. There is nowhere to hide. But there is also nowhere to hide the decisions. Each face is a mark, and the marks make the work. The silhouette reads clearly. Light and shadow resolve into clean geometry. Many VZGLYD slides use that fact directly. They do not have to all use it in the same way.
+
+The terrain slide's toon shading formula is `floor(diff * 3.0) / 3.0`. Five characters of arithmetic that say: for this world, light has three states. Shadow. Mid. Highlight. There is no gradient between shadow and mid-tone. There is a step. This is not a simulation of how light behaves. It is a decision about what this rendered world needs. The value of the constraint is not that it forces every slide into the same formula. It is that it forces every slide to decide what its own formula should be.
+
+Bayer dithering is one way to do the same thing. When a slide applies a 4×4 matrix at pixel coordinates, visible grain keeps the screen present — coarse enough to read as texture, fine enough not to distract. Photorealistic rendering promises you will forget the screen. VZGLYD does not need to make that promise. Some slides may use dither, some may use hard colour steps, some may simply let the geometry carry the presence. The constant is not the treatment. The constant is the restraint.
+
+VZGLYD should not drift into an unrestricted material arms race. Materials are described directly and economically. Sometimes that means a single base colour. Sometimes a small repeating map. Sometimes a Fresnel term for water. These are not attempts to simulate every measured property of a surface. They are descriptions of how a material should feel at room scale within a hard budget. Material in VZGLYD is decision, not accumulation.
+
+---
+
+You are working in a small space. The space has hard budgets, a bounded contract, and no obligation to imitate one canonical slide. The vertex budget is real. The texture limit is real. None of this is a problem to solve — it is the form you are writing in. The most interesting thing you can make is the most interesting thing you can make within it. The constraint is not the obstacle between you and the slide you want to build. It is what makes the direction meaningful.
+
+VZGLYD. Small worlds, well made.

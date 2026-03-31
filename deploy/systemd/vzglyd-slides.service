@@ -1,0 +1,6 @@
+[Unit]
+Description=Restart VZGLYD after slides directory changes
+
+[Service]
+Type=oneshot
+ExecStart=/bin/systemctl try-restart vzglyd.service

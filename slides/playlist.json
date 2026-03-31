@@ -1,0 +1,13 @@
+{
+  "defaults": {
+    "duration_seconds": 7,
+    "transition_in": "crossfade",
+    "transition_out": "crossfade"
+  },
+  "slides": [
+    {
+      "path": "clock.vzglyd",
+      "params": { "background": [0.02, 0.02, 0.02] }
+    }
+  ]
+}

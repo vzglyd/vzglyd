@@ -1,0 +1,20 @@
+name: Validate Registry
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JSON
+        run: jq '.' index.json > /dev/null
+      - name: Validate slide schema
+        run: |
+          jq -e '
+            .schema_version == 1 and
+            (.slides | type == "array")
+          ' index.json > /dev/null

@@ -1,0 +1,16 @@
+[package]
+name = "minimal_slide_example"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+bytemuck = { version = "1", features = ["derive"] }
+once_cell = "1"
+postcard = { version = "1", features = ["alloc", "use-std"] }
+serde = { version = "1", features = ["derive"] }
+vzglyd-slide = { path = "../../../lume-slide" }
+
+[workspace]

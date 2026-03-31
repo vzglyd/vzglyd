@@ -1,0 +1,43 @@
+VZGLYD conformance tasks (README claims vs current state)
+
+- Slide packaging and manifest
+  - [ ] Define a slide package layout (wasm + manifest + assets dir) and enforce it in loader (current: manifest optional, assets freeform)
+  - [ ] Surface manifest metadata (name/version/author) in UI/logs when rotating slides
+  - [x] Provide example manifests for reference slides (terrain/flat)
+  - [ ] Add asset hashing in manifest (BSP-style) and verify assets directory against manifest entries
+  - [ ] Enforce stricter WASM import whitelist (currently memory-only enforced) and add tests
+
+- Dynamic slide lifecycle and scheduling
+  - [ ] Implement real lifecycle hooks over WASM ABI: init, per-frame update, optional teardown (current: stubs only)
+  - [x] Add scheduler to rotate multiple slides; add simple transition (currently hard cut)
+  - [ ] Add hot-reload/reload-on-change for slide packages
+
+- Rendering model breadth
+  - [x] Unify Screen2D and World3D slides behind a single `SlideRenderer`
+  - [x] Allow shaders to be provided by slides (WGSL) with host fallback
+  - [ ] Validate slide-provided shaders safely (Naga validation, limits)
+  - [ ] Extend spec to include pipeline/material descriptors (within limits) instead of single pipeline
+  - [ ] Expose 2D/3D composition helpers via ABI (camera/view setup, screen-space layers)
+
+- Capability constraints and Pi4 target
+  - [ ] Enforce Pi4 resource budgets at runtime with telemetry (currently limits validate spec only)
+  - [ ] Add profiling/diagnostic overlay for frame pacing
+  - [ ] Add conformance tests/benchmarks aimed at Pi4
+  - [ ] Track runtime budgets (draw calls, buffer sizes) and warn when exceeding BSP-like caps
+
+- Data integration
+  - [ ] Design host data-provider ABI for slides (sandboxed)
+  - [ ] Provide example data-driven slide using the API
+
+- Platform/package completeness
+  - [ ] Add Linux/Pi4 build/run instructions and CI smoke tests
+  - [ ] Validate slides unmodified on Pi4 hardware (manual run)
+
+- Safety/portability
+  - [x] Formalize basic WASM ABI versioning (vzglyd_abi_version, spec exports)
+  - [ ] Validate slide binaries at load (allowed imports, memory limits, size caps)
+  - [ ] Document ABI and wire format for slide authors
+
+- Authoring ergonomics
+  - [ ] Provide tooling/templates to scaffold new slides (cargo script, starter WGSL, manifest)
+  - [ ] Document slide spec/ABI clearly for authors

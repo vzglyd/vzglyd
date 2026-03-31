@@ -1,0 +1,20 @@
+[Unit]
+Description=VZGLYD Display Engine
+After=weston.service
+Requires=weston.service
+
+[Service]
+Type=simple
+User=vzglyd
+Group=vzglyd
+WorkingDirectory=/var/lib/vzglyd
+Environment=XDG_RUNTIME_DIR=/run/vzglyd
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=RUST_LOG=info
+ExecStartPre=/bin/sh -lc 'for n in $(seq 1 50); do [ -S /run/vzglyd/wayland-0 ] && exit 0; sleep 0.1; done; echo "Wayland socket not ready" >&2; exit 1'
+ExecStart=/usr/local/bin/vzglyd --slides-dir /var/lib/vzglyd/slides
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,15 @@
+[Unit]
+Description=VZGLYD Reminders Bridge
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/vzglyd/bridges/reminders/reminders_bridge.py --daemon --output /tmp/vzglyd-reminders/reminders.json
+Environment=ICLOUD_EMAIL=you@icloud.com
+Environment=ICLOUD_PASSWORD=your-apple-id-password
+Environment=VZGLYD_REMINDERS_PATH=/tmp/vzglyd-reminders/reminders.json
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target

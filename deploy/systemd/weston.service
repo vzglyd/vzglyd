@@ -1,0 +1,20 @@
+[Unit]
+Description=Weston Wayland Compositor for VZGLYD
+After=systemd-user-sessions.service systemd-logind.service dbus.service
+Wants=systemd-logind.service
+
+[Service]
+Type=simple
+User=vzglyd
+Group=vzglyd
+SupplementaryGroups=video render input
+WorkingDirectory=/var/lib/vzglyd
+RuntimeDirectory=vzglyd
+RuntimeDirectoryMode=0700
+Environment=XDG_RUNTIME_DIR=/run/vzglyd
+ExecStart=/usr/bin/weston --backend=drm --socket=wayland-0 --config=/etc/vzglyd/weston.ini --log=/var/log/vzglyd/weston.log
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

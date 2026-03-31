@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-wasip1
+          components: clippy
+      - name: Build engine (no example slides)
+        run: cargo build -p vzglyd
+      - name: Run tests (no example slides)
+        run: cargo test -p vzglyd -p vzglyd-slide
+      - name: Check vzglyd-slide docs
+        run: cargo doc -p vzglyd-slide --no-deps
+      - name: Check vzglyd-sidecar docs
+        run: cargo doc -p vzglyd-sidecar --no-deps
+      - name: Check publish targets
+        run: |
+          cargo check -p vzglyd-slide --target wasm32-wasip1
+          cargo check -p vzglyd-sidecar --target wasm32-wasip1
+
+  test-example-slides:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-wasip1
+      - name: Build workspace with example slides
+        run: cargo build --features example-slides
+      - name: Run all tests with example slides
+        run: cargo test --workspace --features example-slides

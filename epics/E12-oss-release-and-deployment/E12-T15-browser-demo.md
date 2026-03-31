@@ -1,0 +1,145 @@
+# E12-T15: Browser Demo (WebAssembly + WebGL)
+
+| Field | Value |
+|-------|-------|
+| **Epic** | E12 OSS Release, Deployment, and Ecosystem |
+| **Priority** | P2 (medium) |
+| **Estimate** | XL |
+| **Blocked by** | - |
+| **Blocks** | - |
+
+## Description
+
+Port the VZGLYD engine to compile to `wasm32-unknown-unknown` (browser WASM) with a WebGL2 backend, so that any slide can be previewed live in a browser without a Raspberry Pi. Deploy this as a static site (GitHub Pages — free) where each official slide has a live interactive demo. This is the most compelling possible "try before you install" experience for the project.
+
+## Background
+
+This idea has a uniquely favourable feasibility profile for VZGLYD:
+
+- **Slides are already WASM.** A slide is a `.wasm` module compiled to `wasm32-wasip1`. With a thin compatibility shim, the same binary can be loaded in a browser via `WebAssembly.instantiate`.
+- **wgpu supports WebGL2/WebGPU.** The engine already uses wgpu, which has browser backends (`wasm32-unknown-unknown` with `webgl` or `webgpu` feature). The renderer can run in a `<canvas>` element.
+- **Sidecars need a bridge.** The sidecar model (a separate WASM process with WASI network access) doesn't translate directly to the browser. A browser sidecar would use `fetch()` instead of the WASI DNS/TLS stack. This is the main adaptation challenge.
+- **The result is a live registry.** The slide registry (E12-T10) becomes interactive: click a slide, see it running. This is far more compelling than a static screenshot.
+
+## WASI compatibility shim
+
+`wasm32-wasip1` slides use WASI imports for a few things: clock (for time-based animations), random, possibly stdout for debugging. The browser demo needs to provide these as JavaScript imports.
+
+The minimal WASI shim for slides:
+```javascript
+const wasiImports = {
+    wasi_snapshot_preview1: {
+        clock_time_get: (clockId, precision, resultPtr) => {
+            const now = BigInt(Date.now()) * 1000000n;  // ns
+            new DataView(memory.buffer).setBigUint64(resultPtr, now, true);
+            return 0;
+        },
+        random_get: (bufPtr, bufLen) => {
+            crypto.getRandomValues(new Uint8Array(memory.buffer, bufPtr, bufLen));
+            return 0;
+        },
+        // Slides don't use most WASI — stub out the rest
+        fd_write: () => 0,
+        proc_exit: (code) => { throw new Error(`exit: ${code}`); },
+    }
+};
+```
+
+This is a small, auditable shim. Slides that only use WASI for clock and random will work directly. Slides that use DNS/TLS (only sidecars do) need the separate browser sidecar bridge.
+
+## Engine port to wasm32-unknown-unknown
+
+wgpu already supports `wasm32-unknown-unknown` with:
+```toml
+wgpu = { version = "23", features = ["webgl"] }
+```
+
+The main changes needed:
+- Replace `winit` event loop with browser event loop (`winit` supports WASM but needs `web-sys` feature)
+- Replace `drm` Linux dependency with a no-op for WASM target
+- The `pollster` async executor works in WASM
+- Canvas sizing comes from the DOM element rather than a native window
+
+This is non-trivial but entirely within wgpu's documented browser support. The wgpu project has extensive browser examples.
+
+## Browser sidecar bridge
+
+A sidecar in the browser can't use the WASI network stack. Options:
+
+**Option A: Re-implement sidecar as a Web Worker**
+The sidecar logic is compiled to `wasm32-unknown-unknown` with a `fetch()`-based HTTP client instead of `vzglyd_sidecar`. This is the cleanest approach but requires a separate browser build target for each sidecar.
+
+**Option B: Proxy through a serverless function**
+A Cloudflare Worker or GitHub Actions-based pre-fetcher periodically runs the sidecar and stores its output as a JSON file on GitHub Pages. The browser demo fetches this cached JSON. No live sidecar, but the slide displays real data. This is far simpler and the data is only stale by the fetch interval.
+
+**Option C: Demo mode with static data**
+For the browser demo, skip live data entirely. Each slide includes a `demo_payload.json` in its repo with a realistic static payload. The browser engine loads this instead of connecting a sidecar. The demo shows the slide's visual design with representative data, not live data. This is the simplest approach with the highest reliability.
+
+**Recommendation: Option C for initial launch, Option B as upgrade.**
+Option C is zero-infrastructure: the demo payload is checked into the slide repo and served by GitHub Pages. Option B (Cloudflare Worker proxy) is free within generous limits and can be added later to show live data.
+
+## Deployment: GitHub Pages
+
+The browser demo is a static site deployed to GitHub Pages (free, no server required):
+
+```
+vzglyd/demo  (separate repo or gh-pages branch of vzglyd/vzglyd)
+├── index.html              # Gallery of slides with live canvases
+├── engine.wasm             # The vzglyd engine compiled for browser
+├── engine.js               # JS glue (generated by wasm-bindgen or wasm-pack)
+├── slides/
+│   ├── clock/
+│   │   ├── slide.wasm
+│   │   ├── manifest.json
+│   │   └── demo_payload.json
+│   ├── weather/
+│   │   └── ...
+│   └── ...
+└── style.css
+```
+
+The gallery page embeds one `<canvas>` per slide and instantiates the engine for each. On click, a slide loads in a larger modal. This is the interactive registry.
+
+## Build pipeline
+
+The browser demo is built by a GitHub Actions workflow that:
+1. Compiles the engine to `wasm32-unknown-unknown` with `wasm-pack` or raw `wasm-bindgen`
+2. Downloads the latest `.vzglyd` artifact from each official slide repo
+3. Extracts `slide.wasm` and `manifest.json` from each `.vzglyd` file
+4. Copies everything to the Pages deployment directory
+5. Deploys to GitHub Pages
+
+This runs on every engine release (or on a schedule to pick up new slide releases).
+
+## Compatibility constraints
+
+Not all slides will work in the browser demo initially:
+- **Tier 0 slides** (clock, quotes, affirmations, did_you_know): work immediately — no sidecar, no live data
+- **Tier 1+ slides**: work with static demo payloads
+- **3D scenes** (terrain, courtyard): require WebGPU backend (not WebGL2) for full fidelity; may need a fallback
+
+The gallery clearly labels: "Live on Pi" for all slides, "Browser preview available" for slides with browser support.
+
+## Relationship to GitHub Actions costs
+
+This ticket produces a GitHub Pages site (completely free). The build CI that compiles the engine to WASM runs on `ubuntu-latest` (x86_64 building to `wasm32-unknown-unknown`) — this is standard GitHub Actions, using free tier minutes for public repos. No paid runners required.
+
+## Acceptance criteria
+
+- [ ] `cargo build --target wasm32-unknown-unknown -p vzglyd` succeeds with `webgl` feature
+- [ ] At least one Tier 0 slide (clock or quotes) renders correctly in Chrome and Firefox
+- [ ] GitHub Pages site exists with a gallery of at least 3 slides
+- [ ] Each slide in the gallery loads within 5 seconds on a typical connection
+- [ ] Gallery is linked from the project README
+- [ ] Browser console shows no errors during normal slide rendering
+
+## Files to create
+
+| File | Purpose |
+|------|---------|
+| `.github/workflows/deploy-demo.yml` | Build engine WASM + deploy to GitHub Pages |
+| `web/index.html` | Gallery entry point |
+| `web/vzglyd-web.js` | JS bootstrap for WASM engine |
+| `web/style.css` | Gallery styles |
+| (engine) `Cargo.toml` | Add `webgl` feature gate for browser build |
+| (engine) `src/platform/web.rs` | Browser event loop and canvas integration |

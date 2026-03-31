@@ -1,0 +1,17 @@
+[package]
+name = "{{crate_name}}"
+version = "0.1.0"
+edition = "2024"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/vzglyd/{{project-name}}"
+description = "A VZGLYD slide crate"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+bytemuck = { version = "1", features = ["derive"] }
+once_cell = "1"
+postcard = { version = "1", features = ["alloc", "use-std"] }
+serde = { version = "1", features = ["derive"] }
+vzglyd-slide = "0.1"

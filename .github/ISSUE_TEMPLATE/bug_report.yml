@@ -1,0 +1,29 @@
+name: Bug report
+description: Report a malfunction or regression
+labels:
+  - bug
+body:
+  - type: input
+    id: vzglyd_version
+    attributes:
+      label: VZGLYD version
+      placeholder: "0.1.0"
+    validations:
+      required: true
+  - type: input
+    id: slide
+    attributes:
+      label: Affected slide
+      placeholder: "weather or all"
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Run with `RUST_LOG=debug` when possible and paste the relevant output.
+      render: text

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd "$(dirname "$0")"
+
+SLIDE_NAME="$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].name')"
+VERSION="$(jq -r .version manifest.json)"
+OUTFILE="${SLIDE_NAME}-${VERSION}.vzglyd"
+TMP="$(mktemp -d)"
+trap 'rm -rf "$TMP"' EXIT
+
+cargo build --target wasm32-wasip1 --release
+
+if [[ -f sidecar/Cargo.toml ]]; then
+  cargo build --manifest-path sidecar/Cargo.toml --target wasm32-wasip1 --release
+fi
+
+mkdir -p "$TMP/pkg"
+cp manifest.json "$TMP/pkg/"
+cp "target/wasm32-wasip1/release/${SLIDE_NAME}.wasm" "$TMP/pkg/slide.wasm"
+
+if [[ -f sidecar/Cargo.toml ]]; then
+  SIDECAR_NAME="$(cargo metadata --manifest-path sidecar/Cargo.toml --no-deps --format-version 1 | jq -r '.packages[0].name')"
+  cp "sidecar/target/wasm32-wasip1/release/${SIDECAR_NAME}.wasm" "$TMP/pkg/sidecar.wasm"
+fi
+
+if [[ -d shaders ]]; then
+  cp -r shaders "$TMP/pkg/"
+fi
+
+if [[ -d assets ]] && compgen -G "assets/*" >/dev/null; then
+  cp -r assets "$TMP/pkg/"
+fi
+
+(cd "$TMP/pkg" && zip -r "$OLDPWD/${OUTFILE}" .)
+echo "Packaged ${OUTFILE}"

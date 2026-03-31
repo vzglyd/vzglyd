@@ -1,0 +1,60 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to publish (for example v0.1.0)"
+        required: true
+
+jobs:
+  build-aarch64:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-wasip1
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            jq \
+            libdrm-dev \
+            libinput-dev \
+            libudev-dev \
+            libwayland-dev \
+            pkg-config
+      - name: Build release binary
+        run: cargo build --release -p vzglyd
+      - name: Build starter slide archives
+        run: bash ci/build-starter-slides.sh
+      - name: Package release artifacts
+        run: bash ci/package-release.sh
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: vzglyd-release
+          path: dist/*
+
+  release:
+    needs: build-aarch64
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: vzglyd-release
+          path: dist
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          files: dist/*
+          generate_release_notes: true

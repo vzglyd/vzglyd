@@ -1,0 +1,42 @@
+[workspace]
+members = [
+    ".",
+]
+
+[package]
+name = "vzglyd"
+version = "0.1.0"
+edition = "2024"
+description = "A Raspberry Pi display engine for ambient slides compiled to WebAssembly"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/vzglyd/vzglyd"
+homepage = "https://github.com/vzglyd/vzglyd"
+readme = "README.md"
+rust-version = "1.85"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+
+[dependencies]
+wgpu = "23"
+naga = { version = "23.1.0", features = ["wgsl-in"] }
+winit = "0.30"
+pollster = "0.3"
+bytemuck = { version = "1", features = ["derive"] }
+log = "0.4"
+env_logger = "0.11"
+glam = "0.29"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+postcard = { version = "1", features = ["alloc", "use-std"] }
+vzglyd-slide = { path = "../lume-slide", features = ["gpu"] }
+wasmtime = "16"
+wasmtime-wasi = "16"
+thiserror = "1.0"
+wat = "1"
+image = { version = "0.25", default-features = false, features = ["png"] }
+zip = { version = "2", default-features = false, features = ["deflate"] }
+gltf = { version = "1", default-features = false, features = ["KHR_lights_punctual", "extras", "names", "utils"] }
+[target.'cfg(target_os = "linux")'.dependencies]
+drm = "0.15"
