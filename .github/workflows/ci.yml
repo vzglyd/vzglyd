@@ -7,6 +7,27 @@ on:
   pull_request:
 
 jobs:
+  fmt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-wasip1
+          components: clippy
+      - name: Clippy
+        run: cargo clippy -p vzglyd -p vzglyd-slide -p vzglyd-sidecar -- -D warnings
+
   test:
     runs-on: ubuntu-latest
     steps:
@@ -27,6 +48,25 @@ jobs:
         run: |
           cargo check -p vzglyd-slide --target wasm32-wasip1
           cargo check -p vzglyd-sidecar --target wasm32-wasip1
+
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@master
+        with:
+          toolchain: "1.85"
+          targets: wasm32-wasip1
+      - name: Check MSRV
+        run: cargo check -p vzglyd -p vzglyd-slide -p vzglyd-sidecar
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: rustsec/audit-check@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   test-example-slides:
     runs-on: ubuntu-latest
