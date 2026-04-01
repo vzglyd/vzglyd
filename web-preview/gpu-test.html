@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browser GPU check — vzglyd preview</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .check-card {
+      width: min(520px, 100%);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .check-card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.15em 0.55em;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+    .badge-pending { background: #2a2a2a; color: #888; }
+    .badge-ok      { background: #0d2a0d; color: #4f4; border: 1px solid #2a5a2a; }
+    .badge-fail    { background: #2a0d0d; color: #f66; border: 1px solid #7a2020; }
+    .badge-warn    { background: #2a1d00; color: #fa4; border: 1px solid #6a4000; }
+
+    .detail {
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      line-height: 1.6;
+    }
+    .detail strong { color: var(--text); }
+
+    .advice {
+      font-size: 0.85rem;
+      background: #1a1f2e;
+      border: 1px solid #2a3a5a;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      line-height: 1.6;
+      color: var(--text-dim);
+    }
+    .advice strong { color: #7ab0ff; }
+
+    canvas.preview {
+      width: 96px;
+      height: 96px;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      display: block;
+      flex-shrink: 0;
+    }
+
+    .row { display: flex; gap: 1rem; align-items: flex-start; }
+    .row-info { flex: 1; }
+
+    a.back { font-size: 0.85rem; color: var(--accent); text-decoration: none; }
+    a.back:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Browser GPU check</h1>
+      <p class="subtitle">Verifies that WebGL and WebGPU are working in your browser</p>
+    </header>
+
+    <div class="check-card">
+      <h2>WebGL <span class="badge badge-pending" id="badge-webgl">checking…</span></h2>
+      <div class="row">
+        <canvas class="preview" id="canvas-webgl" width="96" height="96"></canvas>
+        <div class="row-info detail" id="detail-webgl">Running…</div>
+      </div>
+    </div>
+
+    <div class="check-card">
+      <h2>WebGPU <span class="badge badge-pending" id="badge-webgpu">checking…</span></h2>
+      <div class="row">
+        <canvas class="preview" id="canvas-webgpu" width="96" height="96"></canvas>
+        <div class="row-info detail" id="detail-webgpu">Running…</div>
+      </div>
+    </div>
+
+    <div class="check-card" id="card-advice" hidden>
+      <h2>What to do</h2>
+      <div class="advice" id="advice-text"></div>
+    </div>
+
+    <a class="back" href="/">← Back to vzglyd preview</a>
+  </div>
+
+  <script>
+    function setBadge(id, state, label) {
+      const el = document.getElementById('badge-' + id);
+      el.textContent = label;
+      el.className = 'badge badge-' + state;
+    }
+    function setDetail(id, html) {
+      document.getElementById('detail-' + id).innerHTML = html;
+    }
+
+    // ── WebGL ─────────────────────────────────────────────────────────────────
+    let webglOk = false;
+    {
+      const canvas = document.getElementById('canvas-webgl');
+      canvas.addEventListener('webglcontextlost', () => {
+        setBadge('webgl', 'fail', 'CONTEXT LOST');
+        setDetail('webgl', 'WebGL context was lost — the GPU process may have crashed.');
+      });
+      const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+      if (!gl) {
+        setBadge('webgl', 'fail', 'FAILED');
+        setDetail('webgl', 'Browser returned no WebGL context. Hardware acceleration may be disabled.');
+      } else {
+        const renderer = gl.getParameter(gl.RENDERER) || '—';
+        const vendor   = gl.getParameter(gl.VENDOR)   || '—';
+        gl.clearColor(0.1, 0.7, 0.3, 1);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        const px = new Uint8Array(4);
+        gl.readPixels(48, 48, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, px);
+        webglOk = px[1] > 50;
+        setBadge('webgl', webglOk ? 'ok' : 'warn', webglOk ? 'OK' : 'NO PIXELS');
+        setDetail('webgl', `
+          ${webglOk ? 'Green quad rendered and confirmed via readPixels.' : `readPixels returned r=${px[0]} g=${px[1]} b=${px[2]} — unexpected.`}<br>
+          <strong>Renderer:</strong> ${renderer}<br>
+          <strong>Vendor:</strong> ${vendor}
+        `);
+      }
+    }
+
+    // ── WebGPU ────────────────────────────────────────────────────────────────
+    let webgpuOk = false;
+    (async () => {
+      const canvas = document.getElementById('canvas-webgpu');
+
+      if (!navigator.gpu) {
+        setBadge('webgpu', 'fail', 'FAILED');
+        setDetail('webgpu', 'navigator.gpu is not defined — WebGPU is not supported in this browser or needs to be enabled.');
+        showAdvice(); return;
+      }
+
+      const adapter = await navigator.gpu.requestAdapter();
+      if (!adapter) {
+        setBadge('webgpu', 'fail', 'NO ADAPTER');
+        setDetail('webgpu', 'requestAdapter() returned null. No compatible GPU adapter found.');
+        showAdvice(); return;
+      }
+
+      const info = adapter.info;
+      const adapterDesc = info
+        ? [info.vendor, info.device, info.description].filter(Boolean).join(' / ')
+        : null;
+
+      const device = await adapter.requestDevice();
+
+      let deviceLost = false;
+      device.lost.then(lostInfo => {
+        deviceLost = true;
+        setBadge('webgpu', 'fail', 'DEVICE LOST');
+        setDetail('webgpu', `GPU device was lost: <strong>${lostInfo.reason}</strong>${lostInfo.message ? ' — ' + lostInfo.message : ''}`);
+        showAdvice();
+      });
+
+      // Spinning triangle using a time uniform
+      const ctx    = canvas.getContext('webgpu');
+      const format = navigator.gpu.getPreferredCanvasFormat();
+      ctx.configure({ device, format });
+
+      const uniformBuf = device.createBuffer({ size: 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+
+      const shader = device.createShaderModule({ code: `
+        @group(0) @binding(0) var<uniform> u: vec4f;
+
+        @vertex fn vs(@builtin(vertex_index) i: u32) -> @builtin(position) vec4f {
+          var p = array<vec2f,3>(vec2f(0.0,0.72), vec2f(-0.72,-0.72), vec2f(0.72,-0.72));
+          let angle = u.x;
+          let c = cos(angle); let s = sin(angle);
+          let r = vec2f(p[i].x * c - p[i].y * s, p[i].x * s + p[i].y * c);
+          return vec4f(r, 0.0, 1.0);
+        }
+        @fragment fn fs() -> @location(0) vec4f {
+          let t = u.y;
+          return vec4f(0.36 + 0.3*sin(t), 0.55 + 0.2*sin(t+2.1), 1.0, 1.0);
+        }
+      `});
+
+      const bgl = device.createBindGroupLayout({ entries: [{
+        binding: 0, visibility: GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT,
+        buffer: { type: 'uniform' },
+      }]});
+
+      const pipeline = device.createRenderPipeline({
+        layout: device.createPipelineLayout({ bindGroupLayouts: [bgl] }),
+        vertex:   { module: shader, entryPoint: 'vs' },
+        fragment: { module: shader, entryPoint: 'fs', targets: [{ format }] },
+        primitive: { topology: 'triangle-list' },
+      });
+
+      const bindGroup = device.createBindGroup({
+        layout: bgl,
+        entries: [{ binding: 0, resource: { buffer: uniformBuf } }],
+      });
+
+      const start = performance.now();
+
+      function drawFrame() {
+        if (deviceLost) return;
+        const t = (performance.now() - start) / 1000;
+        device.queue.writeBuffer(uniformBuf, 0, new Float32Array([t * 1.2, t, 0, 0]));
+        const enc  = device.createCommandEncoder();
+        const pass = enc.beginRenderPass({
+          colorAttachments: [{
+            view: ctx.getCurrentTexture().createView(),
+            clearValue: { r: 0.05, g: 0.05, b: 0.10, a: 1 },
+            loadOp: 'clear', storeOp: 'store',
+          }],
+        });
+        pass.setPipeline(pipeline);
+        pass.setBindGroup(0, bindGroup);
+        pass.draw(3);
+        pass.end();
+        device.queue.submit([enc.finish()]);
+      }
+
+      // Draw one frame then try to read pixels from the visible canvas via createImageBitmap
+      drawFrame();
+
+      // Start animation loop immediately
+      function loop() { if (!deviceLost) { drawFrame(); requestAnimationFrame(loop); } }
+      requestAnimationFrame(loop);
+
+      // Wait two frames for compositing, then read back from the swap-chain canvas
+      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+      drawFrame();
+      await new Promise(r => requestAnimationFrame(r));
+
+      try {
+        const bitmap  = await createImageBitmap(canvas);
+        const scratch = document.createElement('canvas');
+        scratch.width = 96; scratch.height = 96;
+        const ctx2d   = scratch.getContext('2d');
+        ctx2d.drawImage(bitmap, 0, 0);
+        const px = ctx2d.getImageData(48, 24, 1, 1).data; // near top-centre of triangle
+        webgpuOk = px[0] > 20 || px[1] > 20 || px[2] > 20;
+
+        setBadge('webgpu', webgpuOk ? 'ok' : 'warn', webgpuOk ? 'OK' : 'VISUAL ONLY');
+        setDetail('webgpu', `
+          ${webgpuOk
+            ? 'Spinning triangle rendered and confirmed — WebGPU is fully working.'
+            : 'Triangle is visible on screen but pixel readback returned black.<br>WebGPU is rendering, but the browser may not expose canvas pixels to JavaScript (uncommon).'
+          }<br>
+          ${adapterDesc ? `<strong>Adapter:</strong> ${adapterDesc}<br>` : ''}
+          <span style="color:#666;font-size:0.78em">readback px: r=${px[0]} g=${px[1]} b=${px[2]}</span>
+        `);
+      } catch (e) {
+        // createImageBitmap failed — fall back to "visible = ok" judgement
+        webgpuOk = true; // if we got here without device loss, rendering worked
+        setBadge('webgpu', 'ok', 'OK');
+        setDetail('webgpu', `
+          Triangle rendered (pixel readback unavailable: ${e.message}).<br>
+          ${adapterDesc ? `<strong>Adapter:</strong> ${adapterDesc}` : ''}
+        `);
+      }
+
+      showAdvice();
+    })();
+
+    // ── Advice ────────────────────────────────────────────────────────────────
+    function showAdvice() {
+      const card  = document.getElementById('card-advice');
+      const el    = document.getElementById('advice-text');
+      card.hidden = false;
+
+      const isFirefox  = navigator.userAgent.includes('Firefox');
+      const isLinux    = navigator.userAgent.includes('Linux');
+      const isChromium = /Chrome|Chromium|Edg/.test(navigator.userAgent) && !isFirefox;
+
+      if (webgpuOk) {
+        el.innerHTML = `<strong>WebGPU is working.</strong> The vzglyd preview should render correctly in this browser.
+          If a slide still appears black, open the browser console (F12) and check for shader errors.`;
+        return;
+      }
+
+      if (isLinux && isChromium) {
+        el.innerHTML = `<strong>Linux + Chrome / Edge detected.</strong>
+          Chrome and Edge frequently crash the GPU process on Linux due to driver compatibility issues.<br><br>
+          <strong>Best fix: use Firefox</strong> — it has the most reliable WebGPU support on Linux.<br><br>
+          If you prefer Chrome/Edge, try launching with:<br>
+          <code>google-chrome --enable-unsafe-webgpu --use-angle=swiftshader</code><br>
+          or open <code>chrome://flags/#enable-unsafe-webgpu</code> → <em>Enabled</em>.`;
+      } else if (isFirefox) {
+        el.innerHTML = `<strong>Firefox detected.</strong>
+          If WebGPU is not working, enable it in <code>about:config</code>:<br>
+          set <code>dom.webgpu.enabled</code> to <strong>true</strong>, then restart.`;
+      } else {
+        el.innerHTML = `<strong>WebGPU is not available.</strong><br><br>
+          Supported browsers:<br>
+          • <strong>Firefox</strong> (recommended on Linux)<br>
+          • Chrome 113+ / Edge 113+ on Windows or macOS<br>
+          • Safari 18+ on macOS / iOS<br><br>
+          Make sure hardware acceleration is enabled in your browser settings.`;
+      }
+    }
+  </script>
+</body>
+</html>

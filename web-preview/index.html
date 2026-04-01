@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vzglyd preview</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- fflate UMD build: exposes window.fflate, works from file:// -->
+  <script src="https://cdn.jsdelivr.net/npm/fflate@0.8.2/umd/index.js"></script>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>vzglyd preview</h1>
+      <p class="subtitle">Drop a <code>.vzglyd</code> bundle to preview it in your browser</p>
+    </header>
+
+    <div id="drop-zone" role="button" tabindex="0" aria-label="Drop zone for .vzglyd files">
+      <div id="drop-content">
+        <svg class="drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"/>
+        </svg>
+        <p>Drop <code>.vzglyd</code> here</p>
+        <p class="hint">or <label for="file-input" class="file-label">browse files</label></p>
+        <input type="file" id="file-input" accept=".vzglyd" hidden />
+      </div>
+    </div>
+
+    <div id="canvas-container" hidden>
+      <canvas id="render-canvas" width="640" height="480"></canvas>
+      <div id="slide-meta">
+        <span id="slide-name"></span>
+        <span id="slide-fps"></span>
+      </div>
+      <button id="back-btn" title="Load a different bundle">&#8592; Load another</button>
+    </div>
+
+    <div id="status-bar" hidden>
+      <div id="status-spinner" class="spinner" hidden></div>
+      <span id="status-text"></span>
+    </div>
+
+    <div id="error-box" hidden>
+      <strong>Error</strong>
+      <pre id="error-text"></pre>
+      <button id="error-dismiss">Dismiss</button>
+    </div>
+
+    <div id="no-webgpu" hidden>
+      <strong>WebGPU not available</strong>
+      <p id="no-webgpu-detail">
+        This preview requires WebGPU. Try Chrome 113+, Edge 113+, or Safari 18+.
+      </p>
+      <p>
+        On <strong>Linux</strong> (Chrome / Edge) enable the flag and relaunch:<br/>
+        <code>edge://flags/#enable-unsafe-webgpu</code> &nbsp;→&nbsp; <strong>Enabled</strong>
+      </p>
+      <p>
+        On <strong>Windows / macOS</strong> make sure hardware acceleration is on:<br/>
+        <code>edge://settings/system</code> &nbsp;→&nbsp; <em>Use hardware acceleration when available</em>
+      </p>
+    </div>
+
+    <footer id="help-footer">
+      Having issues? <a href="gpu-test.html">Check browser GPU support →</a>
+    </footer>
+
+    <div id="file-origin-warning" hidden>
+      <strong>Serving over HTTP required</strong>
+      <p>
+        Edge and Chrome block WebGPU on <code>file://</code> pages. Serve this folder
+        over a local HTTP server instead — pick any one-liner below, then open
+        <code>http://localhost:8080</code>:
+      </p>
+      <div class="cmd-list">
+        <div class="cmd-row">
+          <code id="cmd-python">python3 -m http.server 8080 --directory web-preview</code>
+          <button class="copy-btn" data-target="cmd-python">Copy</button>
+        </div>
+        <div class="cmd-row">
+          <code id="cmd-npx">npx serve web-preview -l 8080</code>
+          <button class="copy-btn" data-target="cmd-npx">Copy</button>
+        </div>
+        <div class="cmd-row">
+          <code id="cmd-cargo">cargo install basic-http-server &amp;&amp; basic-http-server web-preview -a 127.0.0.1:8080</code>
+          <button class="copy-btn" data-target="cmd-cargo">Copy</button>
+        </div>
+      </div>
+      <p class="hint">Run the command from the <strong>lume</strong> repository root.</p>
+    </div>
+  </div>
+
+  <!-- Load as plain scripts — no ES modules, works from file:// -->
+  <script src="postcard.js"></script>
+  <script src="wasm-host.js"></script>
+  <script src="renderer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
