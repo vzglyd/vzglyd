@@ -31,7 +31,7 @@ use winit::{
 // ── Scene selection ───────────────────────────────────────────────────────────
 
 const LOADING_SCENE_PATH: &str = "$loading";
-const LOADING_SLIDE: &[u8] = include_bytes!("../loading.vzglyd");
+const LOADING_SLIDE: &[u8] = include_bytes!(concat!(env!("OUT_DIR"), "/loading.vzglyd"));
 /// Default directory scanned for `.vzglyd` slide packages when no `--slides-dir` is given.
 const DEFAULT_SLIDES_DIR: &str = "slides";
 

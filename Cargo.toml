@@ -1,6 +1,7 @@
 [workspace]
 members = [
     ".",
+    "loading-slide",
 ]
 
 [package]
@@ -40,3 +41,6 @@ zip = { version = "2", default-features = false, features = ["deflate"] }
 gltf = { version = "1", default-features = false, features = ["KHR_lights_punctual", "extras", "names", "utils"] }
 [target.'cfg(target_os = "linux")'.dependencies]
 drm = "0.15"
+
+[build-dependencies]
+zip = { version = "2", default-features = false, features = ["deflate"] }

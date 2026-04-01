@@ -36,10 +36,10 @@ jobs:
         with:
           targets: wasm32-wasip1
           components: clippy
-      - name: Build engine (no example slides)
+      - name: Build engine + loading slide
         run: cargo build -p vzglyd
-      - name: Run tests (no example slides)
-        run: cargo test -p vzglyd -p vzglyd-slide
+      - name: Run tests (engine + loading slide)
+        run: cargo test -p vzglyd -p vzglyd-slide -p loading-slide
       - name: Check vzglyd-slide docs
         run: cargo doc -p vzglyd-slide --no-deps
       - name: Check vzglyd-sidecar docs
@@ -58,7 +58,7 @@ jobs:
           toolchain: "1.85"
           targets: wasm32-wasip1
       - name: Check MSRV
-        run: cargo check -p vzglyd -p vzglyd-slide -p vzglyd-sidecar
+        run: cargo check -p vzglyd -p vzglyd-slide -p vzglyd-sidecar -p loading-slide
 
   audit:
     runs-on: ubuntu-latest

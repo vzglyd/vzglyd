@@ -1,0 +1,16 @@
+{
+  "name": "Loading",
+  "version": "1.0.0",
+  "author": "LUME",
+  "description": "Loading screen slide compiled from Rust to wasm32-wasip1",
+  "assets": {
+    "scenes": [
+      {
+        "path": "assets/world.glb",
+        "id": "loading_backdrop",
+        "label": "LoadingBackdrop",
+        "compile_profile": "default_world"
+      }
+    ]
+  }
+}
