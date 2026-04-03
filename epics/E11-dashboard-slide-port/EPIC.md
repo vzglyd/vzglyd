@@ -14,7 +14,7 @@ The data collection scripts share significant overlap: 12 of 19 plugins do some 
 
 ### Shared sidecar networking crate: `vzglyd_sidecar`
 
-Extract the terrain sidecar's DNS-over-HTTPS, TLS (rustls), and HTTP client into a reusable library crate at `vzglyd-slide/vzglyd_sidecar/` (or `vzglyd_sidecar/` at workspace root). This crate provides:
+Extract the terrain sidecar's DNS-over-HTTPS, TLS (rustls), and HTTP client into a reusable library crate at `VRX-64-slide/vzglyd_sidecar/` (or `vzglyd_sidecar/` at workspace root). This crate provides:
 
 - `https_get(host, path, headers) -> Result<Vec<u8>, Error>` — single-request HTTPS client
 - `https_get_with_etag(host, path, etag) -> Result<(Vec<u8>, Option<String>), Error>` — conditional GET with ETag/Last-Modified for RSS feeds

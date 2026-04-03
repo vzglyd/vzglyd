@@ -139,7 +139,7 @@ This ticket produces a GitHub Pages site (completely free). The build CI that co
 |------|---------|
 | `.github/workflows/deploy-demo.yml` | Build engine WASM + deploy to GitHub Pages |
 | `web/index.html` | Gallery entry point |
-| `web/vzglyd-web.js` | JS bootstrap for WASM engine |
+| `web/VRX-64-web.js` | JS bootstrap for WASM engine |
 | `web/style.css` | Gallery styles |
 | (engine) `Cargo.toml` | Add `webgl` feature gate for browser build |
 | (engine) `src/platform/web.rs` | Browser event loop and canvas integration |

@@ -86,9 +86,9 @@ demanding, and from whom.
 **IX.**
 
 Two sister systems constitute the formal law within which all slides operate.
-*vzglyd-slide* is the law of form: the ABI contract by which slides speak to the
+*VRX-64-slide* is the law of form: the ABI contract by which slides speak to the
 engine, stable and versioned, the boundary between what is permitted and what
-is not. *vzglyd-sidecar* is the law of data: the channel by which the world
+is not. *VRX-64-sidecar* is the law of data: the channel by which the world
 outside reaches the world inside, constrained to the socket, the request, the
 response. Neither system speaks for itself. Both systems speak through the
 slide.

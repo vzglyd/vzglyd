@@ -12,5 +12,5 @@ The format follows [Keep a Changelog](https://keepachangelog.com/) and versionin
 
 - Initial open source release structure.
 - Native Rust engine with WGSL rendering and WASM slide loading.
-- `vzglyd-slide` and `vzglyd-sidecar` publication scaffolding.
+- `VRX-64-slide` and `VRX-64-sidecar` publication scaffolding.
 - DietPi/Weston deployment files and install script.

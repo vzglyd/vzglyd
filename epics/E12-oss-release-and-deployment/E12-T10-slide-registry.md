@@ -10,7 +10,7 @@
 
 ## Description
 
-Create a `vzglyd/registry` GitHub repository containing a curated `index.json` file that lists all known VZGLYD slides with their metadata and release URLs. This is the discovery layer: users can browse what exists, and the `vzglyd-get` tool (E12-T11) will query it programmatically. The registry is intentionally simple — a static JSON file in a git repo — and can evolve into something more sophisticated later.
+Create a `vzglyd/registry` GitHub repository containing a curated `index.json` file that lists all known VZGLYD slides with their metadata and release URLs. This is the discovery layer: users can browse what exists, and the `VRX-64-get` tool (E12-T11) will query it programmatically. The registry is intentionally simple — a static JSON file in a git repo — and can evolve into something more sophisticated later.
 
 ## Background
 
@@ -169,9 +169,9 @@ Requirements for community submissions:
 
 The maintainer review is lightweight: check the entry is well-formed, the repo exists, and the `.vzglyd` is genuine. No code review of the slide itself — slides run in WASM sandboxes.
 
-## Raw URL for vzglyd-get
+## Raw URL for VRX-64-get
 
-The `vzglyd-get` tool (E12-T11) fetches from:
+The `VRX-64-get` tool (E12-T11) fetches from:
 
 ```
 https://raw.githubusercontent.com/vzglyd/registry/main/index.json

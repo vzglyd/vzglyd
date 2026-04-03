@@ -17,7 +17,7 @@ from typing import Optional
 from zoneinfo import ZoneInfo
 
 DEFAULT_OUTPUT = Path(
-    os.environ.get("VZGLYD_REMINDERS_PATH", "/tmp/vzglyd-reminders/reminders.json")
+    os.environ.get("VZGLYD_REMINDERS_PATH", "/tmp/VRX-64-reminders/reminders.json")
 )
 DEFAULT_SESSION_DIR = Path.home() / ".cache" / "vzglyd" / "icloud_session"
 DEFAULT_INTERVAL = 900

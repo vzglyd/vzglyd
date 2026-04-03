@@ -4,6 +4,6 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-vzglyd-sidecar = { path = "../../../../lume-sidecar" }
+vzglyd_sidecar = { package = "VRX-64-sidecar", path = "../../../../lume-sidecar" }
 
 [workspace]

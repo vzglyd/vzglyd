@@ -51,7 +51,7 @@ The minimal source used in this guide lives in [docs/examples/minimal-slide](exa
 The short version is:
 
 1. Create a library crate with `crate-type = ["cdylib", "rlib"]`.
-2. Add `vzglyd-slide`, `serde`, `postcard`, `bytemuck`, and `once_cell`.
+2. Add `VRX-64-slide`, `serde`, `postcard`, `bytemuck`, and `once_cell`.
 3. Define a `Vertex` type that is `#[repr(C)]`, `Pod`, and `Zeroable`.
 4. Build a `SlideSpec<Vertex>`.
 5. Encode it once with `postcard` and expose `vzglyd_spec_ptr()` / `vzglyd_spec_len()`.
@@ -155,7 +155,7 @@ Copy packaged slides into `/var/lib/vzglyd/slides/` on the device. The packaged 
 
 - `weston.service` for the compositor
 - `vzglyd.service` for the engine
-- `vzglyd-slides.path` to restart the engine when the slides directory changes
+- `VRX-64-slides.path` to restart the engine when the slides directory changes
 
 The full device setup is documented in [../deploy/README.md](../deploy/README.md).
 

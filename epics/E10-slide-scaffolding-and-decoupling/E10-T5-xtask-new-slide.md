@@ -44,7 +44,7 @@ Add to workspace members in root `Cargo.toml`:
 ```toml
 members = [
     ".",
-    "vzglyd-slide",
+    "VRX-64-slide",
     "xtask",
     # ... slides ...
 ]

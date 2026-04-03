@@ -33,7 +33,7 @@ rustup target add wasm32-wasip1
 - Run `cargo test` before opening the PR.
 - Run `cargo clippy -- -D warnings` before opening the PR.
 - Explain any new `unsafe`.
-- ABI-breaking changes to `vzglyd-slide` require an explicit changelog entry and version discussion.
+- ABI-breaking changes to `VRX-64-slide` require an explicit changelog entry and version discussion.
 
 ## Code of conduct
 

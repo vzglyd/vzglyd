@@ -1,4 +1,4 @@
-# E12-T11: vzglyd-get Slide Installer CLI
+# E12-T11: VRX-64-get Slide Installer CLI
 
 | Field | Value |
 |-------|-------|
@@ -10,11 +10,11 @@
 
 ## Description
 
-A small CLI tool, `vzglyd-get`, that queries the slide registry (E12-T10) and installs `.vzglyd` packages into the slides directory. Think `apt install` but for VZGLYD slides. The tool ships as a subcommand of the main `vzglyd` binary (`vzglyd get install weather`) or as a standalone binary.
+A small CLI tool, `VRX-64-get`, that queries the slide registry (E12-T10) and installs `.vzglyd` packages into the slides directory. Think `apt install` but for VZGLYD slides. The tool ships as a subcommand of the main `vzglyd` binary (`vzglyd get install weather`) or as a standalone binary.
 
 ## Background
 
-Without `vzglyd-get`, installing a slide is:
+Without `VRX-64-get`, installing a slide is:
 1. Open browser
 2. Navigate to GitHub
 3. Find the slide repo
@@ -23,7 +23,7 @@ Without `vzglyd-get`, installing a slide is:
 6. Copy it to /var/lib/vzglyd/slides/
 7. Wait for VZGLYD to reload
 
-With `vzglyd-get`, it is:
+With `VRX-64-get`, it is:
 ```
 sudo vzglyd get install weather
 ```
@@ -44,7 +44,7 @@ vzglyd get info <name>                # Show slide details
 
 ## Implementation sketch
 
-`vzglyd-get` is a subcommand of the `vzglyd` binary. It is gated behind a `get` subcommand so it doesn't bloat the main binary for users who configure slides manually.
+`VRX-64-get` is a subcommand of the `vzglyd` binary. It is gated behind a `get` subcommand so it doesn't bloat the main binary for users who configure slides manually.
 
 Key operations:
 1. Fetch `index.json` from the registry URL (with ETag caching to avoid repeated downloads)

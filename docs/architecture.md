@@ -3,7 +3,7 @@
 VZGLYD has three layers:
 
 - `src/`: the native engine, renderer, loader, and platform integration
-- `vzglyd-slide/`: the ABI and scene description contract shared by the engine and slides
+- `VRX-64-slide/`: the ABI and scene description contract shared by the engine and slides
 - `vzglyd_sidecar/`: the WASI-side networking and IPC helpers used by slide sidecars
 
 ## Runtime flow

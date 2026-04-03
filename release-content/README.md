@@ -131,7 +131,7 @@ VZGLYD is made by one person with a television, a Raspberry Pi, and strong opini
 If it has been useful or interesting to you:
 
 [![GitHub Sponsors](https://img.shields.io/badge/sponsor-♥-ea4aaa?style=flat-square)](https://github.com/sponsors/rodgerbenham)
-[![Merch](https://img.shields.io/badge/merch-hat-black?style=flat-square)](https://bonfire.com/vzglyd-merch)
+[![Merch](https://img.shields.io/badge/merch-hat-black?style=flat-square)](https://bonfire.com/VRX-64-merch)
 
 Gold sponsors get an embroidered VZGLYD hat, shipped to wherever you are in the world. It looks good. People ask about it.
 

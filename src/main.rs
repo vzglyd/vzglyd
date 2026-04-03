@@ -1033,7 +1033,7 @@ mod tests {
     use std::time::Duration;
 
     fn test_dir(name: &str) -> PathBuf {
-        let base = std::env::temp_dir().join("vzglyd-main-tests");
+        let base = std::env::temp_dir().join("VRX-64-main-tests");
         fs::create_dir_all(&base).expect("create base temp dir");
         let unique = format!(
             "{name}-{}-{}",

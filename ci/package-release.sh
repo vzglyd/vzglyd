@@ -13,13 +13,13 @@ install -m 755 "${VZGLYD_BIN_PATH}" "${RELEASE_ROOT}/vzglyd"
 install -m 644 deploy/weston.ini "${RELEASE_ROOT}/usr/local/share/vzglyd/weston.ini"
 install -m 644 deploy/systemd/weston.service "${RELEASE_ROOT}/usr/local/share/vzglyd/systemd/weston.service"
 install -m 644 deploy/systemd/vzglyd.service "${RELEASE_ROOT}/usr/local/share/vzglyd/systemd/vzglyd.service"
-install -m 644 deploy/systemd/vzglyd-slides.path "${RELEASE_ROOT}/usr/local/share/vzglyd/systemd/vzglyd-slides.path"
-install -m 644 deploy/systemd/vzglyd-slides.service "${RELEASE_ROOT}/usr/local/share/vzglyd/systemd/vzglyd-slides.service"
+install -m 644 deploy/systemd/VRX-64-slides.path "${RELEASE_ROOT}/usr/local/share/vzglyd/systemd/VRX-64-slides.path"
+install -m 644 deploy/systemd/VRX-64-slides.service "${RELEASE_ROOT}/usr/local/share/vzglyd/systemd/VRX-64-slides.service"
 
-tar -czf "${DIST_DIR}/vzglyd-aarch64-unknown-linux-gnu.tar.gz" -C "${RELEASE_ROOT}" .
+tar -czf "${DIST_DIR}/VRX-64-aarch64-unknown-linux-gnu.tar.gz" -C "${RELEASE_ROOT}" .
 (
   cd "${DIST_DIR}"
-  sha256sum vzglyd-aarch64-unknown-linux-gnu.tar.gz > vzglyd-aarch64-unknown-linux-gnu.tar.gz.sha256
+  sha256sum VRX-64-aarch64-unknown-linux-gnu.tar.gz > VRX-64-aarch64-unknown-linux-gnu.tar.gz.sha256
 )
 
 if [[ -d "${SLIDES_DIR}" ]] && compgen -G "${SLIDES_DIR}/*.vzglyd" >/dev/null; then

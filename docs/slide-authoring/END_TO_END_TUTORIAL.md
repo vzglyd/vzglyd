@@ -28,7 +28,7 @@ my_clock_slide/
 
 ## Step 1: create `Cargo.toml`
 
-`Cargo.toml` is the declaration of the slide's existence in the Rust ecosystem. It names the crate, specifies the cdylib target — the slide compiles to a shared library consumed as WebAssembly — and declares its dependencies on `vzglyd-slide`. Use the same dependency surface as the existing Rust slides:
+`Cargo.toml` is the declaration of the slide's existence in the Rust ecosystem. It names the crate, specifies the cdylib target — the slide compiles to a shared library consumed as WebAssembly — and declares its dependencies on `VRX-64-slide`. Use the same dependency surface as the existing Rust slides:
 
 ```toml
 [package]
@@ -44,11 +44,11 @@ bytemuck = { version = "1", features = ["derive"] }
 once_cell = "1"
 postcard = { version = "1", features = ["alloc", "use-std"] }
 serde = { version = "1", features = ["derive"] }
-vzglyd-slide = { path = "../../lume-slide" }
+VRX-64-slide = { path = "../../lume-slide" }
 heapless = "0.8"
 ```
 
-Adjust the `vzglyd-slide` path so that it points at this repository's `vzglyd-slide/` crate from wherever you place `my_clock_slide/`. `heapless` is only needed once you add the runtime clock overlay. Begin with a fully static slide and add it later if you choose.
+Adjust the `VRX-64-slide` path so that it points at this repository's `VRX-64-slide/` crate from wherever you place `my_clock_slide/`. `heapless` is only needed once you add the runtime clock overlay. Begin with a fully static slide and add it later if you choose.
 
 ## Step 2: define the vertex type
 
@@ -108,7 +108,7 @@ At this stage custom geometry and a texture exist. The first two visible authori
 The `SlideSpec` is the slide's complete declaration to the renderer: geometry, textures, shaders, and draw calls assembled into a single structure. The renderer requires custom shaders. For the smallest useful slide, embed a straightforward textured shader:
 
 ```rust
-fn vzglyd-slide() -> SlideSpec<Vertex> {
+fn VRX-64-slide() -> SlideSpec<Vertex> {
     let (verts, indices) = quad();
     let mesh = StaticMesh {
         label: "panel".into(),
@@ -184,7 +184,7 @@ const WIRE_VERSION: u8 = 1;
 
 static SPEC_BYTES: Lazy<Vec<u8>> = Lazy::new(|| {
     let mut bytes = vec![WIRE_VERSION];
-    bytes.extend(postcard::to_stdvec(&vzglyd-slide()).expect("serialize slide spec"));
+    bytes.extend(postcard::to_stdvec(&VRX-64-slide()).expect("serialize slide spec"));
     bytes
 });
 

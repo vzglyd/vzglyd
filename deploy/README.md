@@ -49,8 +49,8 @@ sudo chown -R vzglyd:vzglyd /var/lib/vzglyd /var/log/vzglyd
 sudo install -m 644 deploy/weston.ini /etc/vzglyd/weston.ini
 sudo install -m 644 deploy/systemd/weston.service /etc/systemd/system/weston.service
 sudo install -m 644 deploy/systemd/vzglyd.service /etc/systemd/system/vzglyd.service
-sudo install -m 644 deploy/systemd/vzglyd-slides.path /etc/systemd/system/vzglyd-slides.path
-sudo install -m 644 deploy/systemd/vzglyd-slides.service /etc/systemd/system/vzglyd-slides.service
+sudo install -m 644 deploy/systemd/VRX-64-slides.path /etc/systemd/system/VRX-64-slides.path
+sudo install -m 644 deploy/systemd/VRX-64-slides.service /etc/systemd/system/VRX-64-slides.service
 ```
 
 5. Install the `vzglyd` binary to `/usr/local/bin/vzglyd`.
@@ -61,15 +61,15 @@ sudo install -m 644 deploy/systemd/vzglyd-slides.service /etc/systemd/system/vzg
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable weston.service vzglyd.service vzglyd-slides.path
-sudo systemctl start weston.service vzglyd.service vzglyd-slides.path
+sudo systemctl enable weston.service vzglyd.service VRX-64-slides.path
+sudo systemctl start weston.service vzglyd.service VRX-64-slides.path
 ```
 
 ## Service Behavior
 
 - `weston.service` creates `/run/vzglyd` and starts Weston with the kiosk shell.
 - `vzglyd.service` waits for `/run/vzglyd/wayland-0` before launching the engine.
-- `vzglyd-slides.path` watches the slides directory and restarts `vzglyd.service` when packages change.
+- `VRX-64-slides.path` watches the slides directory and restarts `vzglyd.service` when packages change.
 
 ## Logs
 

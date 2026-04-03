@@ -40,13 +40,13 @@ E10-T2 Decouple example slides from engine build
 
 ```
 E12-T1 ABI stability policy
-└──> E12-T2 Publish vzglyd-slide
+└──> E12-T2 Publish VRX-64-slide
      ├──> E12-T3 Publish vzglyd_sidecar
      │    └──> E12-T4 Split slides into repos
      │         └──> E12-T5 Prune workspace
      │              └──> E12-T9 Slide distribution CI
      │                   └──> E12-T10 Registry index
-     │                        └──> E12-T11 vzglyd-get CLI
+     │                        └──> E12-T11 VRX-64-get CLI
      ├──> E12-T13 Slide authoring guide
      └──> E12-T14 rustdoc
 

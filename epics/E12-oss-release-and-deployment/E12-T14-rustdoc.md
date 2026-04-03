@@ -1,4 +1,4 @@
-# E12-T14: vzglyd-slide and vzglyd_sidecar Rustdoc
+# E12-T14: VRX-64-slide and vzglyd_sidecar Rustdoc
 
 | Field | Value |
 |-------|-------|
@@ -10,20 +10,20 @@
 
 ## Description
 
-Write complete rustdoc documentation for every public item in `vzglyd-slide` and `vzglyd_sidecar`. These docs appear on docs.rs automatically after crates.io publish and are the primary API reference for slide authors. Every function, struct, enum, and constant needs at minimum: a one-line summary, a longer description where the behaviour is non-obvious, and a usage example where appropriate.
+Write complete rustdoc documentation for every public item in `VRX-64-slide` and `vzglyd_sidecar`. These docs appear on docs.rs automatically after crates.io publish and are the primary API reference for slide authors. Every function, struct, enum, and constant needs at minimum: a one-line summary, a longer description where the behaviour is non-obvious, and a usage example where appropriate.
 
 ## Background
 
 docs.rs is where Rust developers go first when they add a new dependency. If the docs page is empty or unhelpful, they clone the repo and read the source — that's friction. If the docs are clear, they can build confidently without ever leaving their editor.
 
-`vzglyd-slide` in particular needs excellent docs because its types and traits define the contract that every slide must implement. A slide author who misunderstands `SlideSpec` will spend hours debugging rendering artefacts.
+`VRX-64-slide` in particular needs excellent docs because its types and traits define the contract that every slide must implement. A slide author who misunderstands `SlideSpec` will spend hours debugging rendering artefacts.
 
-## vzglyd-slide documentation targets
+## VRX-64-slide documentation targets
 
 ### Module-level (`lib.rs`)
 
 ```rust
-//! # vzglyd-slide
+//! # VRX-64-slide
 //!
 //! Type definitions and ABI contract for [VZGLYD](https://github.com/vzglyd/vzglyd) slides.
 //!
@@ -35,7 +35,7 @@ docs.rs is where Rust developers go first when they add a new dependency. If the
 //! Add to your `Cargo.toml`:
 //! ```toml
 //! [dependencies]
-//! vzglyd-slide = "0"
+//! VRX-64-slide = "0"
 //!
 //! [lib]
 //! crate-type = ["cdylib"]  # required for WASM compilation
@@ -57,7 +57,7 @@ docs.rs is where Rust developers go first when they add a new dependency. If the
 //!
 //! ## ABI stability
 //!
-//! See [`ABI_POLICY.md`](https://github.com/vzglyd/vzglyd/blob/main/vzglyd-slide/ABI_POLICY.md)
+//! See [`ABI_POLICY.md`](https://github.com/vzglyd/vzglyd/blob/main/VRX-64-slide/ABI_POLICY.md)
 //! for the versioning contract.
 ```
 
@@ -89,7 +89,7 @@ Not a trait (it's a raw export), but document it as a module-level item explaini
 /// The engine checks this at load time. If your slide declares an `abi_version`
 /// the engine doesn't recognise, the slide will be rejected with a clear error.
 ///
-/// When this constant increments (a new major version of `vzglyd-slide`), you must
+/// When this constant increments (a new major version of `VRX-64-slide`), you must
 /// recompile your slide and update your `manifest.json`.
 pub const ABI_VERSION: u32 = 1;
 ```
@@ -177,8 +177,8 @@ For WASI-only functions, use `no_run` and note the reason in a `# Platform` sect
 Add a doc-test job to the engine CI:
 
 ```yaml
-- name: Check vzglyd-slide docs
-  run: cargo doc -p vzglyd-slide --no-deps 2>&1 | grep -v "^$" | head -20
+- name: Check VRX-64-slide docs
+  run: cargo doc -p VRX-64-slide --no-deps 2>&1 | grep -v "^$" | head -20
   # Fails if rustdoc emits warnings about broken links or missing docs
 ```
 
@@ -186,19 +186,19 @@ Use `#![deny(missing_docs)]` in both crates to enforce documentation as a compil
 
 ## Acceptance criteria
 
-- [ ] `#![deny(missing_docs)]` is set in both `vzglyd-slide/src/lib.rs` and `vzglyd_sidecar/src/lib.rs`
-- [ ] `cargo doc -p vzglyd-slide --no-deps` produces zero warnings
+- [ ] `#![deny(missing_docs)]` is set in both `VRX-64-slide/src/lib.rs` and `vzglyd_sidecar/src/lib.rs`
+- [ ] `cargo doc -p VRX-64-slide --no-deps` produces zero warnings
 - [ ] `cargo doc -p vzglyd_sidecar --no-deps` produces zero warnings
 - [ ] Every public function, struct, enum, and constant has a doc comment
 - [ ] `vzglyd_update` contract is documented at the module level with parameter and return value semantics
 - [ ] `channel_push` / `channel_poll` include an end-to-end example
-- [ ] All doc-tests pass (`cargo test --doc -p vzglyd-slide`)
+- [ ] All doc-tests pass (`cargo test --doc -p VRX-64-slide`)
 - [ ] docs.rs pages render correctly after publish (check within 15 minutes)
 
 ## Files to modify
 
 | File | Change |
 |------|---------|
-| `vzglyd-slide/src/lib.rs` | Add `#![deny(missing_docs)]`, module-level docs, all item docs |
+| `VRX-64-slide/src/lib.rs` | Add `#![deny(missing_docs)]`, module-level docs, all item docs |
 | `vzglyd_sidecar/src/lib.rs` | Add `#![deny(missing_docs)]`, module-level docs, all item docs |
 | `.github/workflows/ci.yml` | Add doc-check job |

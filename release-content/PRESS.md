@@ -47,8 +47,8 @@ music playback, calendar, air quality, server status, personal reminders,
 language, and more. The data slides share a design language: very dark
 backgrounds, cyan accent text, clean typographic hierarchy.
 
-**Authoring.** The slide specification (`vzglyd-slide`) and sidecar networking
-kit (`vzglyd-sidecar`) are published on crates.io. Anyone with Rust installed can
+**Authoring.** The slide specification (`VRX-64-slide`) and sidecar networking
+kit (`VRX-64-sidecar`) are published on crates.io. Anyone with Rust installed can
 build a slide.
 
 **License.** MIT or Apache 2.0. Open source.

@@ -20,16 +20,16 @@ cp -R "${SOURCE_DIR}/." "${DEST_DIR}/"
 
 if [[ -f "${DEST_DIR}/Cargo.toml" ]]; then
   sed -i \
-    -e 's|vzglyd_slide = { path = "../../vzglyd_slide" }|vzglyd-slide = "0.1"|' \
-    -e 's|vzglyd_sidecar = { path = "../../vzglyd_sidecar" }|vzglyd-sidecar = "0.1"|' \
+    -e 's|vzglyd_slide = { path = "../../vzglyd_slide" }|VRX-64-slide = "0.1"|' \
+    -e 's|vzglyd_sidecar = { path = "../../vzglyd_sidecar" }|VRX-64-sidecar = "0.1"|' \
     "${DEST_DIR}/Cargo.toml"
 fi
 
 if [[ -f "${DEST_DIR}/sidecar/Cargo.toml" ]]; then
   sed -i \
-    -e 's|vzglyd_slide = { path = "../../../vzglyd_slide" }|vzglyd-slide = "0.1"|' \
-    -e 's|vzglyd_sidecar = { path = "../../../vzglyd_sidecar" }|vzglyd-sidecar = "0.1"|' \
-    -e 's|vzglyd_sidecar = { path = "../../vzglyd_sidecar" }|vzglyd-sidecar = "0.1"|' \
+    -e 's|vzglyd_slide = { path = "../../../vzglyd_slide" }|VRX-64-slide = "0.1"|' \
+    -e 's|vzglyd_sidecar = { path = "../../../vzglyd_sidecar" }|VRX-64-sidecar = "0.1"|' \
+    -e 's|vzglyd_sidecar = { path = "../../vzglyd_sidecar" }|VRX-64-sidecar = "0.1"|' \
     "${DEST_DIR}/sidecar/Cargo.toml"
 fi
 

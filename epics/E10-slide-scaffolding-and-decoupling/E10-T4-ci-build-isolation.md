@@ -10,7 +10,7 @@
 
 ## Description
 
-Restructure the CI pipeline so that the core engine (`vzglyd` + `vzglyd-slide`) builds and tests in an independent job, and example slides build in a separate downstream job whose failure does not block the engine's build status. This is the CI counterpart to E10-T2's Cargo feature gate — together they ensure that a third-party API change (e.g., Coinbase altering their spot price response schema) produces a yellow warning, not a red build.
+Restructure the CI pipeline so that the core engine (`vzglyd` + `VRX-64-slide`) builds and tests in an independent job, and example slides build in a separate downstream job whose failure does not block the engine's build status. This is the CI counterpart to E10-T2's Cargo feature gate — together they ensure that a third-party API change (e.g., Coinbase altering their spot price response schema) produces a yellow warning, not a red build.
 
 ## Background
 
@@ -18,7 +18,7 @@ Today, if CI runs `cargo build` or `cargo test` at the workspace root, every wor
 
 After E10-T2 makes the example slides optional, CI needs two jobs:
 
-1. **Engine job** (gate for merges): `cargo build -p vzglyd && cargo test -p vzglyd && cargo build -p vzglyd-slide && cargo test -p vzglyd-slide`
+1. **Engine job** (gate for merges): `cargo build -p vzglyd && cargo test -p vzglyd && cargo build -p VRX-64-slide && cargo test -p VRX-64-slide`
 2. **Examples job** (informational): builds each example slide to `wasm32-wasip1`, runs their tests, and runs `build.sh` to produce packages. This job is `allow-failure` / `continue-on-error`.
 
 ## Step-by-step implementation
@@ -32,9 +32,9 @@ engine:
   steps:
     - cargo build -p vzglyd
     - cargo test -p vzglyd
-    - cargo build -p vzglyd-slide
-    - cargo test -p vzglyd-slide
-    - cargo clippy -p vzglyd -p vzglyd-slide -- -D warnings
+    - cargo build -p VRX-64-slide
+    - cargo test -p VRX-64-slide
+    - cargo clippy -p vzglyd -p VRX-64-slide -- -D warnings
 ```
 
 No slide crates are compiled. This job should be fast (~2 minutes on cached CI).
@@ -83,7 +83,7 @@ Revert the deliberate error after verification.
 
 ## Acceptance criteria
 
-- [ ] Engine CI job (`vzglyd` + `vzglyd-slide`) passes independently of all slide crates
+- [ ] Engine CI job (`vzglyd` + `VRX-64-slide`) passes independently of all slide crates
 - [ ] Examples CI job builds each slide in a matrix, with `continue-on-error: true`
 - [ ] A compile error in any single example slide does not block PRs from merging
 - [ ] The terrain sidecar builds as part of the terrain matrix entry

@@ -37,7 +37,7 @@ jobs:
       - name: Upload release artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: vzglyd-release
+          name: VRX-64-release
           path: dist/*
 
   release:
@@ -50,7 +50,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: vzglyd-release
+          name: VRX-64-release
           path: dist
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2

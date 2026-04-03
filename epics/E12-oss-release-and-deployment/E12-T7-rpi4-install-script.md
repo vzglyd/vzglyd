@@ -66,9 +66,9 @@ VZGLYD_BIN="/usr/local/bin/vzglyd"
 GITHUB_REPO="vzglyd/vzglyd"
 GITHUB_RELEASES="https://github.com/${GITHUB_REPO}/releases"
 
-log()  { echo "[vzglyd-install] $*"; }
-err()  { echo "[vzglyd-install] ERROR: $*" >&2; exit 1; }
-warn() { echo "[vzglyd-install] WARN: $*" >&2; }
+log()  { echo "[VRX-64-install] $*"; }
+err()  { echo "[VRX-64-install] ERROR: $*" >&2; exit 1; }
+warn() { echo "[VRX-64-install] WARN: $*" >&2; }
 ```
 
 ### Step 1 — Prerequisite checks
@@ -174,8 +174,8 @@ install_binary() {
         log "Latest version: $version"
     fi
 
-    url="${GITHUB_RELEASES}/download/${version}/vzglyd-aarch64-unknown-linux-gnu.tar.gz"
-    local checksum_url="${GITHUB_RELEASES}/download/${version}/vzglyd-aarch64-unknown-linux-gnu.tar.gz.sha256"
+    url="${GITHUB_RELEASES}/download/${version}/VRX-64-aarch64-unknown-linux-gnu.tar.gz"
+    local checksum_url="${GITHUB_RELEASES}/download/${version}/VRX-64-aarch64-unknown-linux-gnu.tar.gz.sha256"
 
     log "Downloading vzglyd $version..."
     local tmp

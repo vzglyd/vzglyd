@@ -35,7 +35,7 @@ The effort is disproportionate and the result would be fragile against Apple API
     │
     │  writes JSON every 15 minutes
     ▼
-/tmp/vzglyd-reminders/reminders.json    (well-known path)
+/tmp/VRX-64-reminders/reminders.json    (well-known path)
     │
     │  reads via WASI filesystem preopen
     ▼
@@ -59,7 +59,7 @@ Fork `dashboard/plugins/reminders/tools/reminders_getter.py` into `tools/reminde
 Change the output from CSV to JSON, written to a configurable path:
 
 ```python
-output_path = os.environ.get("VZGLYD_REMINDERS_PATH", "/tmp/vzglyd-reminders/reminders.json")
+output_path = os.environ.get("VZGLYD_REMINDERS_PATH", "/tmp/VRX-64-reminders/reminders.json")
 ```
 
 Output format:
@@ -119,12 +119,12 @@ Add a `wasi_preopens` field to the slide manifest (or sidecar manifest) that tel
 {
   "name": "reminders",
   "sidecar": {
-    "wasi_preopens": ["/tmp/vzglyd-reminders:/data"]
+    "wasi_preopens": ["/tmp/VRX-64-reminders:/data"]
   }
 }
 ```
 
-This maps the host path `/tmp/vzglyd-reminders` to the guest path `/data`. The sidecar sees `/data/reminders.json`.
+This maps the host path `/tmp/VRX-64-reminders` to the guest path `/data`. The sidecar sees `/data/reminders.json`.
 
 If this manifest extension is too invasive for one slide, alternatively use environment variables: the engine sets `REMINDERS_PATH=/path/to/file` and the sidecar reads it via `environ_get`.
 
@@ -142,7 +142,7 @@ After=network.target
 
 [Service]
 ExecStart=/usr/bin/python3 /path/to/reminders_bridge.py
-Environment=VZGLYD_REMINDERS_PATH=/tmp/vzglyd-reminders/reminders.json
+Environment=VZGLYD_REMINDERS_PATH=/tmp/VRX-64-reminders/reminders.json
 Environment=ICLOUD_EMAIL=...
 Environment=ICLOUD_PASSWORD=...
 Restart=on-failure

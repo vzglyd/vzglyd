@@ -10,7 +10,7 @@
 
 ## Description
 
-Move the example slide crate dependencies (`terrain_slide`, `flat_slide`, `golf_slide`, `dashboard_slide`) behind a Cargo feature gate so that the default `cargo build` compiles only the engine and `vzglyd-slide`. This ensures that a breaking change in any example slide — including transitive breakage from upstream API changes in the terrain sidecar's Coinbase client — does not prevent the core plugin from building.
+Move the example slide crate dependencies (`terrain_slide`, `flat_slide`, `golf_slide`, `dashboard_slide`) behind a Cargo feature gate so that the default `cargo build` compiles only the engine and `VRX-64-slide`. This ensures that a breaking change in any example slide — including transitive breakage from upstream API changes in the terrain sidecar's Coinbase client — does not prevent the core plugin from building.
 
 ## Background
 
@@ -114,7 +114,7 @@ cargo test -p vzglyd --features examples
 
 Optionally, move the example slides out of the `[workspace].members` list entirely. This would mean `cargo test` at the workspace root no longer includes them. If they remain workspace members, their compile errors still appear during `cargo check` at the root (which is confusing). Moving them out means they build only when explicitly targeted or via their own `build.sh`.
 
-Evaluate the trade-off: keeping them as workspace members allows shared `Cargo.lock` and consistent dependency versions. Removing them gives full isolation. A middle ground is a separate `slides/Cargo.toml` workspace that shares `vzglyd-slide` via path dependency but has its own lock file.
+Evaluate the trade-off: keeping them as workspace members allows shared `Cargo.lock` and consistent dependency versions. Removing them gives full isolation. A middle ground is a separate `slides/Cargo.toml` workspace that shares `VRX-64-slide` via path dependency but has its own lock file.
 
 ## Acceptance criteria
 

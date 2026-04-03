@@ -3,6 +3,16 @@
 version = 4
 
 [[package]]
+name = "VRX-64-slide"
+version = "0.1.0"
+source = "git+https://github.com/vzglyd/VRX-64-slide#988b9fe212f0422f5bc117225494a1b99c3eecc8"
+dependencies = [
+ "bytemuck",
+ "serde",
+ "wgpu",
+]
+
+[[package]]
 name = "ab_glyph"
 version = "0.2.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1819,10 +1829,10 @@ checksum = "11d3d7f243d5c5a8b9bb5d6dd2b1602c0cb0b9db1621bafc7ed66e35ff9fe092"
 name = "loading-slide"
 version = "0.1.0"
 dependencies = [
+ "VRX-64-slide",
  "bytemuck",
  "postcard",
  "serde",
- "vzglyd-slide",
 ]
 
 [[package]]
@@ -3266,6 +3276,7 @@ checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 name = "vzglyd"
 version = "0.1.0"
 dependencies = [
+ "VRX-64-slide",
  "bytemuck",
  "drm",
  "env_logger",
@@ -3279,23 +3290,12 @@ dependencies = [
  "serde",
  "serde_json",
  "thiserror 1.0.69",
- "vzglyd-slide",
  "wasmtime",
  "wasmtime-wasi",
  "wat",
  "wgpu",
  "winit",
  "zip",
-]
-
-[[package]]
-name = "vzglyd-slide"
-version = "0.1.0"
-source = "git+https://github.com/vzglyd/vzglyd-slide#f22ee923cce5d9eb30410a497472c1933fd67319"
-dependencies = [
- "bytemuck",
- "serde",
- "wgpu",
 ]
 
 [[package]]

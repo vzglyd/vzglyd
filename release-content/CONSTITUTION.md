@@ -9,7 +9,7 @@
 **Article I**
 
 The slide author must be diligent, must respect the formal principles and
-history of VZGLYD, must comply with the constraints established in vzglyd-slide,
+history of VZGLYD, must comply with the constraints established in VRX-64-slide,
 and must uphold the aesthetic norms encoded in this Constitution. The slide is
 not a personal artifact. It is a unit of work produced within a collective
 formal system.
@@ -32,7 +32,7 @@ decisions within them.
 **Article IV**
 
 The slide author may employ any rendering technique, any colour, any subject
-matter that can be expressed within the constraints of vzglyd-slide. What the
+matter that can be expressed within the constraints of VRX-64-slide. What the
 system permits, the author may attempt. What the system does not permit, the
 author may not attempt by other means.
 

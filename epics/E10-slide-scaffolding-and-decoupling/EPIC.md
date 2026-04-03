@@ -24,7 +24,7 @@ VZGLYD's slide ecosystem is growing, but creating a new slide requires manually 
 ## Scope
 
 - Create a `cargo-generate` template under `templates/slide/` with Cargo.toml, lib.rs, manifest.json, build.sh, and optional sidecar scaffolding.
-- Move example slide crate dependencies behind a Cargo feature gate (`examples` feature on the root crate) so the default build compiles only the engine + `vzglyd-slide`.
+- Move example slide crate dependencies behind a Cargo feature gate (`examples` feature on the root crate) so the default build compiles only the engine + `VRX-64-slide`.
 - Restructure CI to build the engine independently, then build example slides as a non-blocking downstream job.
 - Extract reusable sidecar networking into a `sidecar_support` crate or inline template.
 - Add a `cargo xtask new-slide` (or equivalent) command that wraps `cargo-generate` with project-specific defaults.

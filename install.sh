@@ -11,15 +11,15 @@ GITHUB_REPO="${GITHUB_REPO:-vzglyd/vzglyd}"
 GITHUB_RELEASES="https://github.com/${GITHUB_REPO}/releases"
 
 log() {
-  echo "[vzglyd-install] $*"
+  echo "[VRX-64-install] $*"
 }
 
 warn() {
-  echo "[vzglyd-install] WARN: $*" >&2
+  echo "[VRX-64-install] WARN: $*" >&2
 }
 
 err() {
-  echo "[vzglyd-install] ERROR: $*" >&2
+  echo "[VRX-64-install] ERROR: $*" >&2
   exit 1
 }
 
@@ -91,7 +91,7 @@ resolve_version() {
 download_release() {
   local version="$1"
   local tmp_dir="$2"
-  local archive_url="${GITHUB_RELEASES}/download/${version}/vzglyd-aarch64-unknown-linux-gnu.tar.gz"
+  local archive_url="${GITHUB_RELEASES}/download/${version}/VRX-64-aarch64-unknown-linux-gnu.tar.gz"
   local checksum_url="${archive_url}.sha256"
 
   log "Downloading vzglyd ${version}"
@@ -114,20 +114,20 @@ install_binary_and_assets() {
   install -m 644 "${tmp_dir}/usr/local/share/vzglyd/weston.ini" /usr/local/share/vzglyd/weston.ini
   install -m 644 "${tmp_dir}/usr/local/share/vzglyd/systemd/weston.service" /usr/local/share/vzglyd/systemd/weston.service
   install -m 644 "${tmp_dir}/usr/local/share/vzglyd/systemd/vzglyd.service" /usr/local/share/vzglyd/systemd/vzglyd.service
-  install -m 644 "${tmp_dir}/usr/local/share/vzglyd/systemd/vzglyd-slides.path" /usr/local/share/vzglyd/systemd/vzglyd-slides.path
-  install -m 644 "${tmp_dir}/usr/local/share/vzglyd/systemd/vzglyd-slides.service" /usr/local/share/vzglyd/systemd/vzglyd-slides.service
+  install -m 644 "${tmp_dir}/usr/local/share/vzglyd/systemd/VRX-64-slides.path" /usr/local/share/vzglyd/systemd/VRX-64-slides.path
+  install -m 644 "${tmp_dir}/usr/local/share/vzglyd/systemd/VRX-64-slides.service" /usr/local/share/vzglyd/systemd/VRX-64-slides.service
 }
 
 install_services() {
   log "Installing systemd service files"
   install -m 644 /usr/local/share/vzglyd/systemd/weston.service /etc/systemd/system/weston.service
   install -m 644 /usr/local/share/vzglyd/systemd/vzglyd.service /etc/systemd/system/vzglyd.service
-  install -m 644 /usr/local/share/vzglyd/systemd/vzglyd-slides.path /etc/systemd/system/vzglyd-slides.path
-  install -m 644 /usr/local/share/vzglyd/systemd/vzglyd-slides.service /etc/systemd/system/vzglyd-slides.service
+  install -m 644 /usr/local/share/vzglyd/systemd/VRX-64-slides.path /etc/systemd/system/VRX-64-slides.path
+  install -m 644 /usr/local/share/vzglyd/systemd/VRX-64-slides.service /etc/systemd/system/VRX-64-slides.service
   install -m 644 /usr/local/share/vzglyd/weston.ini "${VZGLYD_CONFIG}/weston.ini"
 
   systemctl daemon-reload
-  systemctl enable weston.service vzglyd.service vzglyd-slides.path
+  systemctl enable weston.service vzglyd.service VRX-64-slides.path
 }
 
 install_starter_slides() {
@@ -157,7 +157,7 @@ start_services() {
   systemctl start weston.service
   sleep 3
   systemctl start vzglyd.service
-  systemctl start vzglyd-slides.path
+  systemctl start VRX-64-slides.path
 }
 
 print_summary() {

@@ -10,7 +10,7 @@
 
 ## Description
 
-After all slides have been extracted to their own repos (E12-T4), remove them from the engine's `Cargo.toml` workspace members and from the `slides/` directory. The engine repo ends up containing only the core engine, `vzglyd-slide`, `vzglyd_sidecar`, `slides/loading/`, and the `templates/` directory.
+After all slides have been extracted to their own repos (E12-T4), remove them from the engine's `Cargo.toml` workspace members and from the `slides/` directory. The engine repo ends up containing only the core engine, `VRX-64-slide`, `vzglyd_sidecar`, `slides/loading/`, and the `templates/` directory.
 
 ## Background
 
@@ -18,7 +18,7 @@ This is the cleanup step that completes the decoupling. E10-T2 put slide deps be
 
 After this ticket, `cargo build` in the engine repo builds only:
 - `vzglyd` (the engine binary)
-- `vzglyd-slide`
+- `VRX-64-slide`
 - `vzglyd_sidecar`
 - `loading_slide`
 
@@ -38,7 +38,7 @@ Edit the root `Cargo.toml` `[workspace].members` array to contain only:
 [workspace]
 members = [
     ".",
-    "vzglyd-slide",
+    "VRX-64-slide",
     "vzglyd_sidecar",
     "slides/loading",
 ]
@@ -91,7 +91,7 @@ All must pass without reference to any removed slide crates.
 
 ## Acceptance criteria
 
-- [ ] `[workspace].members` contains only engine, vzglyd-slide, vzglyd_sidecar, slides/loading
+- [ ] `[workspace].members` contains only engine, VRX-64-slide, vzglyd_sidecar, slides/loading
 - [ ] `cargo build` completes without building any extracted slide
 - [ ] `cargo test` passes
 - [ ] `slides/` directory contains only `loading/`

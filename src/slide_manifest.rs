@@ -307,7 +307,7 @@ mod tests {
                 "uses_transparency":true
             },
             "sidecar":{
-                "wasi_preopens":["/tmp/vzglyd-reminders:/data"]
+                "wasi_preopens":["/tmp/VRX-64-reminders:/data"]
             }
         }"#;
         let manifest: SlideManifest = serde_json::from_str(json).expect("parse manifest");
@@ -372,7 +372,7 @@ mod tests {
         assert_eq!(
             manifest.sidecar,
             Some(ManifestSidecar {
-                wasi_preopens: vec!["/tmp/vzglyd-reminders:/data".to_string()],
+                wasi_preopens: vec!["/tmp/VRX-64-reminders:/data".to_string()],
             })
         );
     }
@@ -554,7 +554,7 @@ mod tests {
                 uses_transparency: Some(false),
             }),
             sidecar: Some(ManifestSidecar {
-                wasi_preopens: vec!["/tmp/vzglyd-reminders:/data".to_string()],
+                wasi_preopens: vec!["/tmp/VRX-64-reminders:/data".to_string()],
             }),
             ..Default::default()
         };
@@ -572,7 +572,7 @@ mod tests {
         assert_eq!(
             decoded.sidecar,
             Some(ManifestSidecar {
-                wasi_preopens: vec!["/tmp/vzglyd-reminders:/data".to_string()],
+                wasi_preopens: vec!["/tmp/VRX-64-reminders:/data".to_string()],
             })
         );
     }

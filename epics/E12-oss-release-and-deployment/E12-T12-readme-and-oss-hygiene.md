@@ -31,7 +31,7 @@ Licensed under either of
 at your option.
 ```
 
-Create `LICENSE-MIT` and `LICENSE-APACHE` at the repo root. All slide repos, `vzglyd-slide`, and `vzglyd_sidecar` use the same license.
+Create `LICENSE-MIT` and `LICENSE-APACHE` at the repo root. All slide repos, `VRX-64-slide`, and `vzglyd_sidecar` use the same license.
 
 **This must match the license declared in every Cargo.toml.** If Cargo.toml says `MIT OR Apache-2.0`, the actual license files must exist.
 
@@ -104,7 +104,7 @@ A Raspberry Pi display engine for always-on ambient information dashboards. Buil
 - All tests must pass (`cargo test`)
 - `cargo clippy -- -D warnings` must pass
 - No new `unsafe` without explanation
-- ABI-breaking changes to `vzglyd-slide` require a MAJOR version bump and a CHANGELOG entry
+- ABI-breaking changes to `VRX-64-slide` require a MAJOR version bump and a CHANGELOG entry
 
 ## Code of conduct
 
@@ -132,7 +132,7 @@ Versions follow [Semantic Versioning](https://semver.org/).
 - DRM/KMS and Wayland display backends
 - wgpu-based rendering with WGSL shaders
 - Slide sidecar model for live data
-- vzglyd-slide 0.1.0 ABI
+- VRX-64-slide 0.1.0 ABI
 - vzglyd_sidecar 0.1.0
 ```
 
@@ -236,7 +236,7 @@ body:
 
 - [ ] `cargo test` passes
 - [ ] `cargo clippy -- -D warnings` passes
-- [ ] If this changes `vzglyd-slide`: CHANGELOG entry and version bump
+- [ ] If this changes `VRX-64-slide`: CHANGELOG entry and version bump
 - [ ] If this is a new slide: follows the authoring guide structure
 ```
 

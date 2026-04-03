@@ -25,14 +25,14 @@ Cross-compilation from x86_64 to aarch64 is well-supported in the Rust ecosystem
 
 | Artifact | Description |
 |----------|-------------|
-| `vzglyd-aarch64-unknown-linux-gnu.tar.gz` | Binary + deploy/ files |
-| `vzglyd-aarch64-unknown-linux-gnu.tar.gz.sha256` | SHA-256 checksum |
+| `VRX-64-aarch64-unknown-linux-gnu.tar.gz` | Binary + deploy/ files |
+| `VRX-64-aarch64-unknown-linux-gnu.tar.gz.sha256` | SHA-256 checksum |
 | `starter-slides.tar.gz` | Pre-built .vzglyd packages (clock, quotes, weather) |
 | `starter-slides.tar.gz.sha256` | SHA-256 checksum |
 
 ## Tarball contents
 
-`vzglyd-aarch64-unknown-linux-gnu.tar.gz` extracts to:
+`VRX-64-aarch64-unknown-linux-gnu.tar.gz` extracts to:
 
 ```
 vzglyd                                      # the binary
@@ -96,7 +96,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: vzglyd-aarch64
+          name: VRX-64-aarch64
           path: dist/
 ```
 
@@ -109,7 +109,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          name: vzglyd-aarch64
+          name: VRX-64-aarch64
           path: dist/
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -132,7 +132,7 @@ mkdir -p "$DIST"
 cp target/release/vzglyd .
 
 # Create tarball
-tar -czf "$DIST/vzglyd-aarch64-unknown-linux-gnu.tar.gz" \
+tar -czf "$DIST/VRX-64-aarch64-unknown-linux-gnu.tar.gz" \
     vzglyd \
     --transform 's|^deploy/|usr/local/share/vzglyd/|' \
     deploy/weston.ini \
@@ -140,8 +140,8 @@ tar -czf "$DIST/vzglyd-aarch64-unknown-linux-gnu.tar.gz" \
     deploy/systemd/vzglyd.service
 
 # Checksum
-(cd "$DIST" && sha256sum vzglyd-aarch64-unknown-linux-gnu.tar.gz \
-    > vzglyd-aarch64-unknown-linux-gnu.tar.gz.sha256)
+(cd "$DIST" && sha256sum VRX-64-aarch64-unknown-linux-gnu.tar.gz \
+    > VRX-64-aarch64-unknown-linux-gnu.tar.gz.sha256)
 
 # Starter slides (pre-built .vzglyd packages must exist in ci/starter-slides/)
 if [[ -d ci/starter-slides ]]; then
@@ -176,7 +176,7 @@ done
 ## Version tagging convention
 
 - Engine releases: `v0.1.0`, `v0.2.0`, etc.
-- `vzglyd-slide` releases: `vzglyd-slide-v0.1.0` (separate tag, separate workflow)
+- `VRX-64-slide` releases: `VRX-64-slide-v0.1.0` (separate tag, separate workflow)
 - `vzglyd_sidecar` releases: `vzglyd_sidecar-v0.1.0` (separate tag, separate workflow)
 
 These are independent release streams on the same repo.
@@ -185,7 +185,7 @@ These are independent release streams on the same repo.
 
 - [ ] Pushing a `v*` tag triggers the release workflow
 - [ ] Workflow completes on `ubuntu-24.04-arm` (or cross if arm runner unavailable)
-- [ ] `vzglyd-aarch64-unknown-linux-gnu.tar.gz` contains the binary and deploy files
+- [ ] `VRX-64-aarch64-unknown-linux-gnu.tar.gz` contains the binary and deploy files
 - [ ] `sha256sum -c` verifies both tarballs
 - [ ] GitHub Release is created with correct tag name and generated release notes
 - [ ] The binary in the tarball runs on RPi4 DietPi (`./vzglyd --version` succeeds)

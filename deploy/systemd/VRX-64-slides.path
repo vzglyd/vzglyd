@@ -3,7 +3,7 @@ Description=Watch the VZGLYD slides directory for package changes
 
 [Path]
 PathModified=/var/lib/vzglyd/slides
-Unit=vzglyd-slides.service
+Unit=VRX-64-slides.service
 
 [Install]
 WantedBy=multi-user.target

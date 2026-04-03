@@ -16,7 +16,7 @@ Create a `cargo-generate` template under `templates/slide/` that scaffolds a new
 
 Every existing slide follows a near-identical pattern:
 
-- `Cargo.toml`: `crate-type = ["cdylib", "rlib"]`, depends on `vzglyd-slide`, `bytemuck`, `postcard`, `serde`.
+- `Cargo.toml`: `crate-type = ["cdylib", "rlib"]`, depends on `VRX-64-slide`, `bytemuck`, `postcard`, `serde`.
 - `src/lib.rs`: Defines a `Vertex` type, implements `SlideSpec` construction, exports `vzglyd_update(dt: f32) -> i32`.
 - `manifest.json`: Declares name, abi_version, scene_space, optional assets/shaders/display config.
 - `build.sh`: Builds to `wasm32-wasip1`, runs asset export, creates compatibility symlinks.
@@ -94,7 +94,7 @@ edition = "2024"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-vzglyd-slide = { path = "../../vzglyd-slide" }
+VRX-64-slide = { path = "../../VRX-64-slide" }
 serde = { version = "1", features = ["derive"] }
 bytemuck = { version = "1", features = ["derive"] }
 postcard = { version = "1", features = ["alloc", "use-std"] }

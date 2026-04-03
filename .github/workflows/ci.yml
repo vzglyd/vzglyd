@@ -26,7 +26,7 @@ jobs:
           targets: wasm32-wasip1
           components: clippy
       - name: Clippy
-        run: cargo clippy -p vzglyd -p vzglyd-slide -p vzglyd-sidecar -- -D warnings
+        run: cargo clippy -p vzglyd -p VRX-64-slide -p VRX-64-sidecar -- -D warnings
 
   test:
     runs-on: ubuntu-latest
@@ -39,15 +39,15 @@ jobs:
       - name: Build engine + loading slide
         run: cargo build -p vzglyd
       - name: Run tests (engine + loading slide)
-        run: cargo test -p vzglyd -p vzglyd-slide -p loading-slide
-      - name: Check vzglyd-slide docs
-        run: cargo doc -p vzglyd-slide --no-deps
-      - name: Check vzglyd-sidecar docs
-        run: cargo doc -p vzglyd-sidecar --no-deps
+        run: cargo test -p vzglyd -p VRX-64-slide -p loading-slide
+      - name: Check VRX-64-slide docs
+        run: cargo doc -p VRX-64-slide --no-deps
+      - name: Check VRX-64-sidecar docs
+        run: cargo doc -p VRX-64-sidecar --no-deps
       - name: Check publish targets
         run: |
-          cargo check -p vzglyd-slide --target wasm32-wasip1
-          cargo check -p vzglyd-sidecar --target wasm32-wasip1
+          cargo check -p VRX-64-slide --target wasm32-wasip1
+          cargo check -p VRX-64-sidecar --target wasm32-wasip1
 
   msrv:
     runs-on: ubuntu-latest
@@ -58,7 +58,7 @@ jobs:
           toolchain: "1.85"
           targets: wasm32-wasip1
       - name: Check MSRV
-        run: cargo check -p vzglyd -p vzglyd-slide -p vzglyd-sidecar -p loading-slide
+        run: cargo check -p vzglyd -p VRX-64-slide -p VRX-64-sidecar -p loading-slide
 
   audit:
     runs-on: ubuntu-latest

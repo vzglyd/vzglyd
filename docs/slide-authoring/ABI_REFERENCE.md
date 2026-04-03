@@ -206,7 +206,7 @@ Initialization happens once. The update loop runs at frame rate. Teardown is bou
 
 ## `SlideSpec` reference
 
-The `SlideSpec` type lives in `vzglyd-slide/src/lib.rs`. The table below documents every field that the host currently decodes.
+The `SlideSpec` type lives in `VRX-64-slide/src/lib.rs`. The table below documents every field that the host currently decodes.
 
 ### Top-level `SlideSpec<V>`
 

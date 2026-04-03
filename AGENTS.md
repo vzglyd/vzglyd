@@ -19,7 +19,7 @@ The principle lives in `docs/constraint-principle.md`; treat it as the manifesto
 The workspace has three layers:
 
 - **Engine** (`src/`) — the Rust/wgpu/wasmtime runtime. Native target only.
-- **Spec crates** (`vzglyd-slide/`, `vzglyd-sidecar/`) — the ABI and networking contracts. `wasm32-wasip1` + native (for tests).
+- **Spec crates** (`VRX-64-slide/`, `VRX-64-sidecar/`) — the ABI and networking contracts. `wasm32-wasip1` + native (for tests).
 - **Slides** (`slides/*/`) — each an independent `cdylib + rlib` crate. `wasm32-wasip1` for deployment, native for tests.
 
 ---
@@ -56,14 +56,14 @@ Tests include shader validation, package manifest validation, transition math, a
 Every slide crate must:
 
 - Be `crate-type = ["cdylib", "rlib"]` — `cdylib` for WASM deployment, `rlib` for native test compilation
-- Depend on `vzglyd-slide` for `SlideSpec<V>`, `Limits`, `StaticMesh`, `DynamicMesh`, etc.
+- Depend on `VRX-64-slide` for `SlideSpec<V>`, `Limits`, `StaticMesh`, `DynamicMesh`, etc.
 - Export `vzglyd_abi_version() -> u32` returning `1`
 - Export `vzglyd_update(dt: f32) -> i32` returning `0` (continue) or `1` (stop)
 - Optionally export `vzglyd_init()` and `vzglyd_teardown()`
 
 The slide's entry point is `vzglyd_spec() -> SlideSpec<V>`. It returns the full geometric description — meshes, textures, camera path, scene space — serialised with `postcard`. The engine calls it once on load.
 
-Slides that need network data use a **sidecar**: a separate `wasm32-wasip1` process from `vzglyd-sidecar` that pushes data to the slide via channel. The slide calls `channel_poll()` from `vzglyd_host`. The sidecar calls `channel_push()`. They share nothing else.
+Slides that need network data use a **sidecar**: a separate `wasm32-wasip1` process from `VRX-64-sidecar` that pushes data to the slide via channel. The slide calls `channel_poll()` from `vzglyd_host`. The sidecar calls `channel_push()`. They share nothing else.
 
 ---
 
@@ -137,7 +137,7 @@ See `SLIDE_FORMAT.md` and `docs/slide-authoring/MANIFEST_PACKAGE_GUIDE.md` for t
 
 1. `cargo new --lib slides/my_slide`
 2. Set `crate-type = ["cdylib", "rlib"]` in `Cargo.toml`
-3. Add `vzglyd-slide = { path = "../../vzglyd-slide" }` as a dependency
+3. Add `VRX-64-slide = { path = "../../VRX-64-slide" }` as a dependency
 4. Add the crate to the workspace `members` list in the root `Cargo.toml`
 5. Implement `vzglyd_abi_version`, `vzglyd_spec`, and `vzglyd_update` (minimum viable surface)
 6. Write a `manifest.json` and `build.sh` modelled on an existing slide
@@ -171,7 +171,7 @@ Do not add network calls inside a slide's WASM module. Network access belongs in
 
 Do not hard-code a universal visual treatment into the ABI or loader. Shared facilities are fine when they improve portability or ergonomics, but slides should remain free to choose whether they use them.
 
-Do not modify `vzglyd-slide` ABI types without understanding that doing so breaks all existing compiled slides. ABI version bumps are a major decision. See `docs/slide-authoring/ABI_REFERENCE.md`.
+Do not modify `VRX-64-slide` ABI types without understanding that doing so breaks all existing compiled slides. ABI version bumps are a major decision. See `docs/slide-authoring/ABI_REFERENCE.md`.
 
 ---
 

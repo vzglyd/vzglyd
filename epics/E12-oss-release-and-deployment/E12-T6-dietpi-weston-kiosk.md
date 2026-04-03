@@ -64,7 +64,7 @@ deploy/
 ├── systemd/
 │   ├── weston.service               # Weston service unit
 │   ├── vzglyd.service                 # VZGLYD service unit
-│   └── vzglyd-slides.path             # Optional: watch slides dir for changes
+│   └── VRX-64-slides.path             # Optional: watch slides dir for changes
 └── skel/
     └── slides/                      # Empty directory placeholder
         └── .gitkeep
@@ -151,7 +151,7 @@ The `ExecStartPre=/bin/sleep 2` is a pragmatic guard: even after `weston.service
 
 VZGLYD looks for `.vzglyd` packages in `/var/lib/vzglyd/slides/`. On first install this directory is empty — the install script populates it with starter slides (see E12-T7).
 
-An optional `vzglyd-slides.path` unit can trigger a vzglyd reload when a new `.vzglyd` file is dropped into the slides directory (using `inotifywait` or the vzglyd binary's own watch mode, if it supports it).
+An optional `VRX-64-slides.path` unit can trigger a vzglyd reload when a new `.vzglyd` file is dropped into the slides directory (using `inotifywait` or the vzglyd binary's own watch mode, if it supports it).
 
 ## Step-by-step implementation
 
@@ -208,5 +208,5 @@ This directory ships with the engine source. It is not generated — it is the c
 | `deploy/weston.ini` | Weston kiosk configuration |
 | `deploy/systemd/weston.service` | Weston systemd unit |
 | `deploy/systemd/vzglyd.service` | VZGLYD systemd unit |
-| `deploy/systemd/vzglyd-slides.path` | Optional: inotify-based slide watcher |
+| `deploy/systemd/VRX-64-slides.path` | Optional: inotify-based slide watcher |
 | `deploy/skel/slides/.gitkeep` | Placeholder for slide directory |

@@ -14,7 +14,7 @@ Prepare `vzglyd_sidecar` for publication on crates.io: fill out metadata, write 
 
 ## Background
 
-`vzglyd_sidecar` is the companion crate to `vzglyd-slide`. Where `vzglyd-slide` is the WASM slide ABI, `vzglyd_sidecar` is the WASM sidecar standard library: HTTPS client, channel push/poll, poll loop harness. Without it on crates.io, every sidecar author must either copy the 800-line networking stack from `slides/terrain/sidecar/` or vendor the whole engine repo.
+`vzglyd_sidecar` is the companion crate to `VRX-64-slide`. Where `VRX-64-slide` is the WASM slide ABI, `vzglyd_sidecar` is the WASM sidecar standard library: HTTPS client, channel push/poll, poll loop harness. Without it on crates.io, every sidecar author must either copy the 800-line networking stack from `slides/terrain/sidecar/` or vendor the whole engine repo.
 
 The crate was extracted as part of E11-T1 and is already used by all ported sidecars. This ticket is publication-only — the implementation is complete.
 

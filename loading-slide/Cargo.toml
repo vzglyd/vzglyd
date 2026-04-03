@@ -8,7 +8,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 # Aliased so existing `use lume_slide::` in world_assets.rs keeps compiling.
-lume-slide = { package = "vzglyd-slide", git = "https://github.com/vzglyd/vzglyd-slide" }
+lume-slide = { package = "VRX-64-slide", git = "https://github.com/vzglyd/VRX-64-slide" }
 serde = { version = "1", features = ["derive"] }
 bytemuck = { version = "1", features = ["derive"] }
 postcard = { version = "1", features = ["alloc", "use-std"] }

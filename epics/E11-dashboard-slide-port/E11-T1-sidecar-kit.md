@@ -99,7 +99,7 @@ rustls = { version = "0.23", default-features = false, features = ["ring", "logg
 webpki-roots = "0.26"
 ```
 
-Add to workspace members in root `Cargo.toml`. This crate does NOT need `vzglyd-slide` — it is independent.
+Add to workspace members in root `Cargo.toml`. This crate does NOT need `VRX-64-slide` — it is independent.
 
 ### Step 2 — Extract `socket.rs`
 

@@ -61,7 +61,7 @@ Each slide repository follows this layout:
 
 ```
 slide-<name>/
-├── Cargo.toml               # Uses vzglyd-slide = "0.x" from crates.io
+├── Cargo.toml               # Uses VRX-64-slide = "0.x" from crates.io
 ├── src/
 │   └── lib.rs
 ├── shaders/
@@ -98,7 +98,7 @@ For each slide in the table above:
 
 1. Create the new repo at `github.com/vzglyd/slide-<name>`.
 2. Use `git filter-repo` or subtree split to preserve commit history from `slides/<name>/` (preserving history is preferred over a clean import — it gives proper attribution).
-3. Update `Cargo.toml` to replace `vzglyd-slide = { path = "../../vzglyd-slide" }` with `vzglyd-slide = "0.1"` and similarly for `vzglyd_sidecar`.
+3. Update `Cargo.toml` to replace `VRX-64-slide = { path = "../../VRX-64-slide" }` with `VRX-64-slide = "0.1"` and similarly for `vzglyd_sidecar`.
 4. Add `README.md`, `LICENSE`, `CHANGELOG.md`.
 5. Add `.github/workflows/ci.yml` (see E12-T9 for the distribution CI definition).
 6. Verify `cargo build --target wasm32-wasip1 --release` succeeds in the new repo.
