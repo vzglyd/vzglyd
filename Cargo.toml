@@ -20,7 +20,7 @@ lto = "thin"
 codegen-units = 1
 
 [dependencies]
-wgpu = "23"
+wgpu = "26"
 naga = { version = "23.1.0", features = ["wgsl-in"] }
 winit = "0.30"
 pollster = "0.3"
