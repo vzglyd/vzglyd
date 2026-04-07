@@ -32,7 +32,7 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 postcard = { version = "1", features = ["alloc", "use-std"] }
 vzglyd_slide = { package = "VRX-64-slide", git = "https://github.com/vzglyd/VRX-64-slide", features = ["gpu"] }
-wasmtime = "16"
+wasmtime = "34"
 wasmtime-wasi = "16"
 thiserror = "1.0"
 wat = "1"
